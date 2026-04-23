@@ -1,3 +1,7 @@
 // Categories Feature - Components
-export { CategoryChartsImproved } from './CategoryChartsImproved';
+export { 
+  CategorySalesChartImproved,
+  CategoryRevenueChartImproved,
+  CategoryPieChartImproved 
+} from './CategoryChartsImproved';
 export { CategoryTreeTable } from './CategoryTreeTable';

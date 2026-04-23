@@ -1,0 +1,66 @@
+# ============================================================================
+# SYSTEMD SERVICE PARA FARMAGO BACKEND
+# Servidor: 190.187.184.138
+# ============================================================================
+#
+# INSTRUCCIONES DE INSTALACIÓN:
+# 1. Editar este archivo y reemplazar:
+#    - tu_usuario: con tu usuario de Linux
+#    - /ruta/completa/al/proyecto: con la ruta real del proyecto
+# 2. Copiar a: sudo cp farmago-backend.service /etc/systemd/system/
+# 3. Recargar systemd: sudo systemctl daemon-reload
+# 4. Habilitar servicio: sudo systemctl enable farmago-backend
+# 5. Iniciar servicio: sudo systemctl start farmago-backend
+# 6. Ver estado: sudo systemctl status farmago-backend
+# 7. Ver logs: sudo journalctl -u farmago-backend -f
+#
+# ============================================================================
+
+[Unit]
+Description=FarmaGo Dashboard Backend API
+Documentation=https://github.com/tu-repo/farmago-dashboard
+After=network.target redis-server.service
+Wants=redis-server.service
+
+[Service]
+Type=simple
+User=tu_usuario
+Group=tu_usuario
+
+# IMPORTANTE: Reemplazar con la ruta real de tu proyecto
+WorkingDirectory=/ruta/completa/al/proyecto/server
+
+# Variables de entorno
+Environment=NODE_ENV=production
+Environment=PORT=3001
+
+# Comando para iniciar el servidor
+ExecStart=/usr/bin/node dist/index.js
+
+# Reinicio automático
+Restart=always
+RestartSec=10
+
+# Límites de recursos
+LimitNOFILE=65536
+MemoryLimit=1G
+
+# Logs
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=farmago-backend
+
+[Install]
+WantedBy=multi-user.target
+
+# ============================================================================
+# COMANDOS ÚTILES:
+# ============================================================================
+# sudo systemctl start farmago-backend    # Iniciar servicio
+# sudo systemctl stop farmago-backend     # Detener servicio
+# sudo systemctl restart farmago-backend  # Reiniciar servicio
+# sudo systemctl status farmago-backend   # Ver estado
+# sudo journalctl -u farmago-backend -f   # Ver logs en tiempo real
+# sudo systemctl enable farmago-backend   # Habilitar inicio automático
+# sudo systemctl disable farmago-backend  # Deshabilitar inicio automático
+# ============================================================================
