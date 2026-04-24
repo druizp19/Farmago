@@ -122,19 +122,20 @@ export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
             <Pie
               data={data}
               cx="50%"
-              cy="48%"
+              cy="50%"
               innerRadius={38}
               outerRadius={58}
               paddingAngle={2}
               dataKey="count"
               nameKey="name"
               isAnimationActive={false}
-              label={({ cx, cy, midAngle, outerRadius, percent }) => {
-                if (percent === undefined || midAngle === undefined) return null;
+              label={({ cx, cy, midAngle, outerRadius, percent, index }) => {
+                if (percent === undefined || midAngle === undefined || percent < 0.05) return null; // No mostrar si es menor al 5%
                 const RADIAN = Math.PI / 180;
-                const radius = outerRadius + 18;
+                const radius = outerRadius + 22;
                 const x = Number(cx) + radius * Math.cos(-midAngle * RADIAN);
                 const y = Number(cy) + radius * Math.sin(-midAngle * RADIAN);
+                
                 return (
                   <text
                     x={x}
@@ -148,7 +149,27 @@ export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
                   </text>
                 );
               }}
-              labelLine={{ stroke: '#9ca3af', strokeWidth: 0.8 }}
+              labelLine={({ cx, cy, midAngle, outerRadius, percent }) => {
+                if (percent === undefined || midAngle === undefined || percent < 0.05) return null;
+                const RADIAN = Math.PI / 180;
+                const innerRadius = outerRadius + 2;
+                const outerRadiusLine = outerRadius + 18;
+                const x1 = Number(cx) + innerRadius * Math.cos(-midAngle * RADIAN);
+                const y1 = Number(cy) + innerRadius * Math.sin(-midAngle * RADIAN);
+                const x2 = Number(cx) + outerRadiusLine * Math.cos(-midAngle * RADIAN);
+                const y2 = Number(cy) + outerRadiusLine * Math.sin(-midAngle * RADIAN);
+                
+                return (
+                  <line
+                    x1={x1}
+                    y1={y1}
+                    x2={x2}
+                    y2={y2}
+                    stroke="#9ca3af"
+                    strokeWidth={1}
+                  />
+                );
+              }}
             >
               {data.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
             </Pie>
@@ -156,7 +177,11 @@ export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
               formatter={(v: any) => [v || 0, 'Órdenes']}
               contentStyle={{ fontSize: 10, borderRadius: 8, border: '1px solid #e5e7eb' }}
             />
-            <Legend wrapperStyle={{ fontSize: 9, paddingTop: 5 }} />
+            <Legend 
+              wrapperStyle={{ fontSize: 9, paddingTop: 5 }} 
+              iconSize={8}
+              formatter={(value) => value.length > 20 ? value.slice(0, 20) + '...' : value}
+            />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>
