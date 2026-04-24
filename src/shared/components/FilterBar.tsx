@@ -130,31 +130,31 @@ export function FilterBar({
   const hasSelectedCategories = filters.categoryLevel1.length > 0 || filters.categoryLevel2.length > 0 || filters.categoryLevel3.length > 0;
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl shadow-sm sticky top-0 z-40">
-      <div className="px-4 py-3">
-        <div className="flex flex-wrap items-center gap-3">
+    <div className="bg-white border border-gray-100 rounded-lg shadow-sm sticky top-0 z-40">
+      <div className="px-2 py-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
           {/* Title */}
-          <div className="flex items-center gap-1.5 text-gray-500 flex-shrink-0">
-            <Filter className="h-3.5 w-3.5" />
-            <span className="text-xs font-semibold uppercase tracking-wide">Filtros</span>
+          <div className="flex items-center gap-0.5 text-gray-500 flex-shrink-0">
+            <Filter className="h-3 w-3" />
+            <span className="text-[10px] font-semibold uppercase tracking-wide">Filtros</span>
             {hasActiveFilters && (
-              <span className="bg-blue-600 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center leading-none">
+              <span className="bg-blue-600 text-white text-[10px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center leading-none">
                 {activeCount}
               </span>
             )}
           </div>
 
-          <div className="h-4 w-px bg-gray-200 flex-shrink-0 hidden sm:block" />
+          <div className="h-2.5 w-px bg-gray-200 flex-shrink-0 hidden sm:block" />
 
           {/* Date presets */}
-          <div className="flex items-center gap-1">
-            <Calendar className="h-3 w-3 text-gray-400 flex-shrink-0" />
-            <div className="flex gap-1">
+          <div className="flex items-center gap-0.5">
+            <Calendar className="h-2.5 w-2.5 text-gray-400 flex-shrink-0" />
+            <div className="flex gap-0.5">
               {PRESETS.map(p => (
                 <button
                   key={p.label}
                   onClick={() => applyPreset(p.days)}
-                  className="text-xs px-2 py-1 rounded-md border border-gray-200 text-gray-600 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors"
+                  className="text-[10px] px-1.5 py-0.5 rounded border border-gray-200 text-gray-600 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors"
                 >
                   {p.label}
                 </button>
@@ -163,42 +163,42 @@ export function FilterBar({
           </div>
 
           {/* Date From */}
-          <div className="flex items-center gap-1">
-            <span className="text-xs text-gray-400 flex-shrink-0">Desde</span>
+          <div className="flex items-center gap-0.5">
+            <span className="text-[10px] text-gray-400 flex-shrink-0">Desde</span>
             <input
               type="date"
               value={filters.dateFrom}
               min="2025-11-01"
               onChange={e => setFilters({ ...filters, dateFrom: e.target.value })}
-              className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400"
+              className="text-[10px] border border-gray-200 rounded px-1.5 py-0.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400"
             />
           </div>
 
           {/* Date To */}
-          <div className="flex items-center gap-1">
-            <span className="text-xs text-gray-400 flex-shrink-0">Hasta</span>
+          <div className="flex items-center gap-0.5">
+            <span className="text-[10px] text-gray-400 flex-shrink-0">Hasta</span>
             <input
               type="date"
               value={filters.dateTo}
               onChange={e => setFilters({ ...filters, dateTo: e.target.value })}
-              className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400"
+              className="text-[10px] border border-gray-200 rounded px-1.5 py-0.5 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400"
             />
           </div>
 
           {/* Time Range */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5">
             <TimePicker
               value={filters.timeFrom}
               onChange={(value) => setFilters({ ...filters, timeFrom: value })}
               placeholder="Hora desde"
-              className="w-32"
+              className="w-24 text-[10px]"
             />
-            <span className="text-xs text-gray-400">-</span>
+            <span className="text-[10px] text-gray-400">-</span>
             <TimePicker
               value={filters.timeTo}
               onChange={(value) => setFilters({ ...filters, timeTo: value })}
               placeholder="Hora hasta"
-              className="w-32"
+              className="w-24 text-[10px]"
             />
           </div>
 
@@ -211,7 +211,7 @@ export function FilterBar({
             selected={filters.status}
             onChange={(selected) => setFilters({ ...filters, status: selected })}
             placeholder="Estado"
-            className="w-44"
+            className="w-40 text-[10px]"
             renderValue={(selected) => 
               selected.length === 0 
                 ? "Todos los estados" 
@@ -227,13 +227,13 @@ export function FilterBar({
               value={filters.origin}
               onValueChange={v => setFilters({ ...filters, origin: v })}
             >
-              <SelectTrigger className={`h-8 w-36 text-xs border-gray-200 ${filters.origin !== 'all' ? 'border-blue-300 bg-blue-50 text-blue-700' : ''}`}>
+              <SelectTrigger className={`h-7 w-32 text-[10px] border-gray-200 ${filters.origin !== 'all' ? 'border-blue-300 bg-blue-50 text-blue-700' : ''}`}>
                 <SelectValue placeholder="Origen" />
               </SelectTrigger>
               <SelectContent position="popper" sideOffset={4} className="max-h-[300px] w-[var(--radix-select-trigger-width)]">
-                <SelectItem value="all">Todos los orígenes</SelectItem>
+                <SelectItem value="all" className="text-[10px]">Todos los orígenes</SelectItem>
                 {filterOptions.origins.map(o => (
-                  <SelectItem key={o} value={o}>{ORIGIN_LABELS[o] || o}</SelectItem>
+                  <SelectItem key={o} value={o} className="text-[10px]">{ORIGIN_LABELS[o] || o}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -245,7 +245,7 @@ export function FilterBar({
             selected={filters.paymentMethod}
             onChange={(selected) => setFilters({ ...filters, paymentMethod: selected })}
             placeholder="Método de pago"
-            className="w-44"
+            className="w-40 text-[10px]"
             renderValue={(selected) => 
               selected.length === 0 
                 ? "Todos los pagos" 
@@ -260,21 +260,21 @@ export function FilterBar({
             value={filters.isCyberOrder}
             onValueChange={v => setFilters({ ...filters, isCyberOrder: v })}
           >
-            <SelectTrigger className={`h-8 w-40 text-xs border-gray-200 ${filters.isCyberOrder !== 'all' ? 'border-purple-300 bg-purple-50 text-purple-700' : ''}`}>
-              <div className="flex items-center gap-1.5">
-                <Zap className="h-3 w-3" />
+            <SelectTrigger className={`h-7 w-36 text-[10px] border-gray-200 ${filters.isCyberOrder !== 'all' ? 'border-purple-300 bg-purple-50 text-purple-700' : ''}`}>
+              <div className="flex items-center gap-1">
+                <Zap className="h-2.5 w-2.5" />
                 <SelectValue placeholder="Tipo de orden" />
               </div>
             </SelectTrigger>
             <SelectContent position="popper" sideOffset={4} className="max-h-[300px] w-[var(--radix-select-trigger-width)]">
-              <SelectItem value="all">Todas las órdenes</SelectItem>
-              <SelectItem value="cyber">
+              <SelectItem value="all" className="text-[10px]">Todas las órdenes</SelectItem>
+              <SelectItem value="cyber" className="text-[10px]">
                 <div className="flex items-center gap-1.5">
-                  <Zap className="h-3 w-3 text-purple-600" />
+                  <Zap className="h-2.5 w-2.5 text-purple-600" />
                   Solo Cyber
                 </div>
               </SelectItem>
-              <SelectItem value="regular">Solo Regulares</SelectItem>
+              <SelectItem value="regular" className="text-[10px]">Solo Regulares</SelectItem>
             </SelectContent>
           </Select>
 
@@ -285,7 +285,7 @@ export function FilterBar({
               selected={filters.categoryLevel1}
               onChange={(selected) => setFilters({ ...filters, categoryLevel1: selected, categoryLevel2: [], categoryLevel3: [] })}
               placeholder="Categoría Nivel 1"
-              className="w-44"
+              className="w-40 text-[10px]"
             />
           )}
 
@@ -295,7 +295,7 @@ export function FilterBar({
               selected={filters.categoryLevel2}
               onChange={(selected) => setFilters({ ...filters, categoryLevel2: selected, categoryLevel3: [] })}
               placeholder="Categoría Nivel 2"
-              className="w-44"
+              className="w-40 text-[10px]"
             />
           )}
 
@@ -305,7 +305,7 @@ export function FilterBar({
               selected={filters.categoryLevel3}
               onChange={(selected) => setFilters({ ...filters, categoryLevel3: selected })}
               placeholder="Categoría Nivel 3"
-              className="w-44"
+              className="w-40 text-[10px]"
             />
           )}
 
@@ -315,15 +315,15 @@ export function FilterBar({
               variant="ghost"
               size="sm"
               onClick={resetFilters}
-              className="h-8 text-xs text-red-500 hover:text-red-700 hover:bg-red-50 gap-1 px-2"
+              className="h-7 text-[10px] text-red-500 hover:text-red-700 hover:bg-red-50 gap-0.5 px-1.5"
             >
-              <RotateCcw className="h-3 w-3" />
+              <RotateCcw className="h-2.5 w-2.5" />
               Limpiar
             </Button>
           )}
 
           {/* Result count */}
-          <div className="ml-auto text-xs text-gray-400 flex-shrink-0">
+          <div className="ml-auto text-[10px] text-gray-400 flex-shrink-0">
             <span className={`font-semibold ${hasActiveFilters ? 'text-blue-600' : 'text-gray-600'}`}>
               {filteredCount.toLocaleString()}
             </span>
@@ -336,14 +336,14 @@ export function FilterBar({
 
       {/* Selected categories chips */}
       {hasSelectedCategories && (
-        <div className="px-4 pb-3 pt-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-gray-400 flex-shrink-0">Categorías seleccionadas:</span>
+        <div className="px-3 pb-2 pt-0">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-[10px] text-gray-400 flex-shrink-0">Categorías seleccionadas:</span>
             
             {filters.categoryLevel1.map(cat => (
               <div
                 key={`l1-${cat}`}
-                className="inline-flex items-center gap-1 px-2 py-1 bg-violet-100 text-violet-700 rounded-md text-xs"
+                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-violet-100 text-violet-700 rounded text-[10px]"
               >
                 <span className="font-medium">N1:</span>
                 <span>{cat}</span>
@@ -351,7 +351,7 @@ export function FilterBar({
                   onClick={() => removeCategory(1, cat)}
                   className="ml-0.5 hover:bg-violet-200 rounded-full p-0.5"
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-2.5 w-2.5" />
                 </button>
               </div>
             ))}
@@ -359,7 +359,7 @@ export function FilterBar({
             {filters.categoryLevel2.map(cat => (
               <div
                 key={`l2-${cat}`}
-                className="inline-flex items-center gap-1 px-2 py-1 bg-violet-100 text-violet-700 rounded-md text-xs"
+                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-violet-100 text-violet-700 rounded text-[10px]"
               >
                 <span className="font-medium">N2:</span>
                 <span>{cat}</span>
@@ -367,7 +367,7 @@ export function FilterBar({
                   onClick={() => removeCategory(2, cat)}
                   className="ml-0.5 hover:bg-violet-200 rounded-full p-0.5"
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-2.5 w-2.5" />
                 </button>
               </div>
             ))}
@@ -375,7 +375,7 @@ export function FilterBar({
             {filters.categoryLevel3.map(cat => (
               <div
                 key={`l3-${cat}`}
-                className="inline-flex items-center gap-1 px-2 py-1 bg-violet-100 text-violet-700 rounded-md text-xs"
+                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-violet-100 text-violet-700 rounded text-[10px]"
               >
                 <span className="font-medium">N3:</span>
                 <span>{cat}</span>
@@ -383,7 +383,7 @@ export function FilterBar({
                   onClick={() => removeCategory(3, cat)}
                   className="ml-0.5 hover:bg-violet-200 rounded-full p-0.5"
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-2.5 w-2.5" />
                 </button>
               </div>
             ))}
@@ -393,22 +393,22 @@ export function FilterBar({
 
       {/* Selected status and payment chips */}
       {(filters.status.length > 0 || filters.paymentMethod.length > 0) && (
-        <div className="px-4 pb-3 pt-0">
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="px-3 pb-2 pt-0">
+          <div className="flex flex-wrap items-center gap-1.5">
             {filters.status.length > 0 && (
               <>
-                <span className="text-xs text-gray-400 flex-shrink-0">Estados:</span>
+                <span className="text-[10px] text-gray-400 flex-shrink-0">Estados:</span>
                 {filters.status.map(status => (
                   <div
                     key={`status-${status}`}
-                    className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-xs"
+                    className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px]"
                   >
                     <span>{STATUS_LABELS[status] || status}</span>
                     <button
                       onClick={() => setFilters({ ...filters, status: filters.status.filter(s => s !== status) })}
                       className="ml-0.5 hover:bg-blue-200 rounded-full p-0.5"
                     >
-                      <X className="h-3 w-3" />
+                      <X className="h-2.5 w-2.5" />
                     </button>
                   </div>
                 ))}
@@ -417,18 +417,18 @@ export function FilterBar({
 
             {filters.paymentMethod.length > 0 && (
               <>
-                <span className="text-xs text-gray-400 flex-shrink-0">Pagos:</span>
+                <span className="text-[10px] text-gray-400 flex-shrink-0">Pagos:</span>
                 {filters.paymentMethod.map(payment => (
                   <div
                     key={`payment-${payment}`}
-                    className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-md text-xs"
+                    className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px]"
                   >
                     <span>{payment}</span>
                     <button
                       onClick={() => setFilters({ ...filters, paymentMethod: filters.paymentMethod.filter(p => p !== payment) })}
                       className="ml-0.5 hover:bg-green-200 rounded-full p-0.5"
                     >
-                      <X className="h-3 w-3" />
+                      <X className="h-2.5 w-2.5" />
                     </button>
                   </div>
                 ))}

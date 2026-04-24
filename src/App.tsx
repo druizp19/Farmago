@@ -28,13 +28,9 @@ import { useDeliveryKPIs } from './features/delivery/hooks/useDeliveryKPIs';
 import { OrdersTable } from './features/orders/components/OrdersTable';
 import { OrderDetailModal } from './features/orders/components/OrderDetailModal';
 import { NewOrderNotification } from './features/orders/components/NewOrderNotification';
-import { Button } from './components/ui/button';
 import {
-  RefreshCw,
   ShoppingBag,
-  Wifi,
   WifiOff,
-  Clock,
 } from 'lucide-react';
 
 export default function App() {
@@ -62,7 +58,6 @@ export default function App() {
     refresh,
     newOrder,
     newOrdersQueue,
-    clearNewOrder,
     clearAllNewOrders,
   } = useDashboard();
 
@@ -129,7 +124,7 @@ export default function App() {
         ) : kpis ? (
           <div className="flex flex-col h-screen">
             {/* Filter Bar - Fixed at top */}
-            <div className="p-4 bg-white border-b border-gray-200">
+            <div className="p-1.5 bg-white border-b border-gray-200">
               <FilterBar
                 filters={filters}
                 setFilters={setFilters}
@@ -147,17 +142,17 @@ export default function App() {
             <div className="flex-1 overflow-y-auto">
               <div className="flex h-full">
                 {/* Main Content Area */}
-                <div className="flex-1 p-4">
+                <div className="flex-1 p-1.5">
                   {/* Layout: KPIs (left column) + Charts (right area) */}
                   {activeTab === 'overview' && (
-                    <div className="flex gap-4">
+                    <div className="flex gap-2.5">
                       {/* KPIs Column - Sticky */}
                       <div 
-                        className="flex-shrink-0 will-change-[width] sticky top-4 self-start kpi-scroll"
+                        className="flex-shrink-0 will-change-[width] sticky top-2 self-start kpi-scroll"
                         style={{ 
-                          width: sidebarCollapsed ? '288px' : '256px',
+                          width: sidebarCollapsed ? '195px' : '180px',
                           transition: 'width 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                          maxHeight: 'calc(100vh - 180px)',
+                          maxHeight: 'calc(100vh - 140px)',
                           overflowY: 'auto'
                         }}
                       >
@@ -165,15 +160,15 @@ export default function App() {
                       </div>
 
                       {/* Charts Area */}
-                      <div className="flex-1 space-y-4 min-w-0">
+                      <div className="flex-1 space-y-2.5 min-w-0">
                     {/* Row 1 */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
                       <RevenueByDayChart kpis={kpis} />
                       <StatusDistributionChart kpis={kpis} />
                     </div>
 
                     {/* Row 2 */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-2.5">
                       <PaymentMethodChart kpis={kpis} />
                       <div className="lg:col-span-2">
                         <TopClientsChart kpis={kpis} />
@@ -181,7 +176,7 @@ export default function App() {
                     </div>
 
                     {/* Row 3 */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
                       <MonthlyRevenueChart kpis={kpis} />
                       <RevenueByStatusChart kpis={kpis} />
                     </div>
@@ -196,20 +191,20 @@ export default function App() {
                     />
 
                     {/* Summary chips */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-                        <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Canal Principal de Pago</p>
-                        <p className="text-sm font-bold text-gray-800 truncate">{kpis.topPaymentMethod}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      <div className="bg-white border border-gray-100 rounded-lg p-2 shadow-sm">
+                        <p className="text-[9px] text-gray-400 uppercase tracking-wide mb-1">Canal Principal de Pago</p>
+                        <p className="text-xs font-bold text-gray-800 truncate">{kpis.topPaymentMethod}</p>
                       </div>
-                      <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-                        <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Órdenes con Error</p>
-                        <p className="text-sm font-bold text-red-600">
+                      <div className="bg-white border border-gray-100 rounded-lg p-2 shadow-sm">
+                        <p className="text-[9px] text-gray-400 uppercase tracking-wide mb-1">Órdenes con Error</p>
+                        <p className="text-xs font-bold text-red-600">
                           {filteredOrders.filter((o: any) => o.workflowInErrorState).length}
                         </p>
                       </div>
-                      <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-                        <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">Entrega Completada</p>
-                        <p className="text-sm font-bold text-emerald-600">
+                      <div className="bg-white border border-gray-100 rounded-lg p-2 shadow-sm">
+                        <p className="text-[9px] text-gray-400 uppercase tracking-wide mb-1">Entrega Completada</p>
+                        <p className="text-xs font-bold text-emerald-600">
                           {filteredOrders.filter((o: any) => o.isAllDelivered).length}
                         </p>
                       </div>
@@ -220,9 +215,9 @@ export default function App() {
 
                   {/* ── CATEGORIES TAB ── */}
                   {activeTab === 'categories' && (
-                <div className="space-y-4">
+                <div className="space-y-2.5">
                   {/* Row 1: Sales + Revenue */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
                     <CategorySalesChartImproved 
                       categoryStats={filteredCategoryStats} 
                       loading={filteredCategoryStats.length === 0}
@@ -252,7 +247,7 @@ export default function App() {
                   </div>
 
                   {/* Row 2: Pie + Radar */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
                     <CategoryPieChartImproved 
                       categoryStats={filteredCategoryStats}
                       loading={filteredCategoryStats.length === 0}
@@ -273,7 +268,7 @@ export default function App() {
 
                   {/* ── PRODUCTS TAB ── */}
                   {activeTab === 'products' && (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <TopProductsChart
                     products={filteredProducts}
                     loading={topProducts.length === 0}
@@ -282,45 +277,45 @@ export default function App() {
                   {/* Product list table */}
                   {topProducts.length > 0 && (
                     <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-                      <div className="px-5 py-3 border-b border-gray-100">
-                        <h3 className="text-sm font-semibold text-gray-800">Ranking de Productos</h3>
-                        <p className="text-xs text-gray-400 mt-0.5">Top 20 productos por unidades — últimas 100 órdenes</p>
+                      <div className="px-3 py-2 border-b border-gray-100">
+                        <h3 className="text-[10px] font-semibold text-gray-800">Ranking de Productos</h3>
+                        <p className="text-[9px] text-gray-400 mt-0.5">Top 20 productos por unidades — últimas 100 órdenes</p>
                       </div>
                       <div className="overflow-x-auto">
-                        <table className="w-full text-xs">
+                        <table className="w-full text-[10px]">
                           <thead className="bg-gray-50">
                             <tr>
-                              <th className="text-left px-4 py-2.5 text-gray-500 font-semibold w-8">#</th>
-                              <th className="text-left px-4 py-2.5 text-gray-500 font-semibold">Producto</th>
-                              <th className="text-left px-4 py-2.5 text-gray-500 font-semibold">Categoría</th>
-                              <th className="text-right px-4 py-2.5 text-gray-500 font-semibold">SKU</th>
-                              <th className="text-right px-4 py-2.5 text-gray-500 font-semibold">Unidades</th>
-                              <th className="text-right px-4 py-2.5 text-gray-500 font-semibold">Órdenes</th>
-                              <th className="text-right px-4 py-2.5 text-gray-500 font-semibold">Ingresos</th>
+                              <th className="text-left px-3 py-2 text-gray-500 font-semibold w-6">#</th>
+                              <th className="text-left px-3 py-2 text-gray-500 font-semibold">Producto</th>
+                              <th className="text-left px-3 py-2 text-gray-500 font-semibold">Categoría</th>
+                              <th className="text-right px-3 py-2 text-gray-500 font-semibold">SKU</th>
+                              <th className="text-right px-3 py-2 text-gray-500 font-semibold">Unidades</th>
+                              <th className="text-right px-3 py-2 text-gray-500 font-semibold">Órdenes</th>
+                              <th className="text-right px-3 py-2 text-gray-500 font-semibold">Ingresos</th>
                             </tr>
                           </thead>
                           <tbody>
                             {topProducts.map((p, i) => (
                               <tr key={p.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
-                                <td className="px-4 py-2.5 text-gray-400 font-medium">{i + 1}</td>
-                                <td className="px-4 py-2.5">
-                                  <div className="flex items-center gap-2">
+                                <td className="px-3 py-2 text-gray-400 font-medium">{i + 1}</td>
+                                <td className="px-3 py-2">
+                                  <div className="flex items-center gap-1.5">
                                     {p.imageUrl && (
                                       <img src={p.imageUrl} alt={p.name}
-                                        className="w-8 h-8 object-contain rounded bg-white border border-gray-100 flex-shrink-0" />
+                                        className="w-7 h-7 object-contain rounded bg-white border border-gray-100 flex-shrink-0" />
                                     )}
                                     <span className="text-gray-700 font-medium line-clamp-1">{p.name}</span>
                                   </div>
                                 </td>
-                                <td className="px-4 py-2.5">
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-violet-50 text-violet-700 border border-violet-100">
+                                <td className="px-3 py-2">
+                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-violet-50 text-violet-700 border border-violet-100">
                                     {p.category}
                                   </span>
                                 </td>
-                                <td className="px-4 py-2.5 text-right text-gray-400 font-mono">{p.refId}</td>
-                                <td className="px-4 py-2.5 text-right font-bold text-blue-600">{p.totalQuantity.toLocaleString()}</td>
-                                <td className="px-4 py-2.5 text-right text-gray-600">{p.orderCount}</td>
-                                <td className="px-4 py-2.5 text-right font-semibold text-emerald-600">
+                                <td className="px-3 py-2 text-right text-gray-400 font-mono">{p.refId}</td>
+                                <td className="px-3 py-2 text-right font-bold text-blue-600">{p.totalQuantity.toLocaleString()}</td>
+                                <td className="px-3 py-2 text-right text-gray-600">{p.orderCount}</td>
+                                <td className="px-3 py-2 text-right font-semibold text-emerald-600">
                                   S/ {(p.totalRevenue / 100).toLocaleString('es-PE', { minimumFractionDigits: 2 })}
                                 </td>
                               </tr>
@@ -335,14 +330,14 @@ export default function App() {
 
                   {/* ── DELIVERY TAB ── */}
                   {activeTab === 'delivery' && (
-                    <div className="flex gap-4">
+                    <div className="flex gap-2.5">
                       {/* Delivery KPIs Column - Sticky */}
                       <div 
-                        className="flex-shrink-0 will-change-[width] sticky top-4 self-start kpi-scroll"
+                        className="flex-shrink-0 will-change-[width] sticky top-2 self-start kpi-scroll"
                         style={{ 
-                          width: sidebarCollapsed ? '288px' : '256px',
+                          width: sidebarCollapsed ? '195px' : '180px',
                           transition: 'width 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-                          maxHeight: 'calc(100vh - 180px)',
+                          maxHeight: 'calc(100vh - 140px)',
                           overflowY: 'auto'
                         }}
                       >
@@ -362,10 +357,10 @@ export default function App() {
 
                   {/* ── ORDERS TAB ── */}
                   {activeTab === 'orders' && (
-                    <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-                      <div className="mb-4">
-                        <h2 className="text-sm font-semibold text-gray-800">Lista de Órdenes</h2>
-                        <p className="text-xs text-gray-400 mt-0.5">
+                    <div className="bg-white border border-gray-100 rounded-lg p-2 shadow-sm">
+                      <div className="mb-2">
+                        <h2 className="text-[10px] font-semibold text-gray-800">Lista de Órdenes</h2>
+                        <p className="text-[9px] text-gray-400 mt-0.5">
                           Haz clic en una orden para ver el detalle completo · Los filtros de arriba aplican aquí también
                         </p>
                       </div>

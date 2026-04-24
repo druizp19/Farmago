@@ -138,9 +138,9 @@ export const KPICards = memo(({ kpis }: KPICardsProps) => {
       border: 'border-gray-200',
     },
     {
-      title: 'Conversión',
+      title: 'Tasa de Éxito',
       value: `${kpis.conversionRate}%`,
-      subtitle: 'Facturadas / Total',
+      subtitle: 'Órdenes completadas',
       icon: Percent,
       color: 'text-gray-900',
       bg: 'bg-gray-100',
@@ -149,22 +149,22 @@ export const KPICards = memo(({ kpis }: KPICardsProps) => {
   ];
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-1.5">
       {cards.map((card) => {
         const Icon = card.icon;
         return (
           <div
             key={card.title}
-            className={`bg-white rounded-xl border ${card.border} px-3 py-2.5 flex items-center gap-2.5 shadow-sm hover:shadow-md transition-shadow duration-200`}
+            className={`bg-white rounded-md border ${card.border} px-2 py-1.5 flex items-center gap-2 shadow-sm hover:shadow-md transition-shadow duration-200`}
           >
-            <div className={`p-1.5 rounded-lg ${card.bg} flex-shrink-0`}>
+            <div className={`p-1 rounded ${card.bg} flex-shrink-0`}>
               <Icon className={`h-3.5 w-3.5 ${card.color}`} />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wide leading-none mb-1 truncate">
+              <p className="text-[9px] font-medium text-gray-400 uppercase tracking-wide leading-none mb-1 truncate">
                 {card.title}
               </p>
-              <p className={`text-base font-black leading-none ${card.color}`}>{card.value}</p>
+              <p className={`text-sm font-black leading-none ${card.color}`}>{card.value}</p>
             </div>
           </div>
         );

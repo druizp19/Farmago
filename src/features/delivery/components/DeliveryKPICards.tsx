@@ -56,29 +56,24 @@ export const DeliveryKPICards = memo(({ kpis }: DeliveryKPICardsProps) => {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {cards.map((card) => {
         const Icon = card.icon;
         return (
           <div
             key={card.title}
-            className={`bg-white rounded-xl border ${card.border} p-3 shadow-sm hover:shadow-md transition-shadow duration-200`}
+            className={`bg-white rounded-lg border ${card.border} px-2 py-1.5 flex items-center gap-2 shadow-sm hover:shadow-md transition-shadow duration-200`}
           >
-            <div className="flex items-start gap-4">
-              <div className={`p-3 rounded-xl ${card.bg} flex-shrink-0`}>
-                <Icon className={`h-6 w-6 ${card.color}`} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">
-                  {card.title}
-                </p>
-                <p className={`text-3xl font-black leading-none ${card.color} mb-2`}>
-                  {card.value}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {card.subtitle}
-                </p>
-              </div>
+            <div className={`p-1 rounded-md ${card.bg} flex-shrink-0`}>
+              <Icon className={`h-3 w-3 ${card.color}`} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[9px] font-medium text-gray-400 uppercase tracking-wide leading-none mb-0.5 truncate">
+                {card.title}
+              </p>
+              <p className={`text-sm font-black leading-none ${card.color}`}>
+                {card.value}
+              </p>
             </div>
           </div>
         );

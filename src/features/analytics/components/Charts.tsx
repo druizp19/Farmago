@@ -49,16 +49,16 @@ CustomTooltip.displayName = 'CustomTooltip';
 export const StatusDistributionChart = memo(({ kpis }: ChartsProps) => {
   return (
     <Card className="border border-gray-100 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold text-gray-700">Distribución por Estado</CardTitle>
-        <CardDescription className="text-xs text-gray-400">Cantidad de órdenes por estado</CardDescription>
+      <CardHeader className="pb-1 px-2.5 pt-2">
+        <CardTitle className="text-xs font-semibold text-gray-700">Distribución por Estado</CardTitle>
+        <CardDescription className="text-[9px] text-gray-400">Cantidad de órdenes por estado</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={kpis.statusDistribution} layout="vertical" margin={{ left: 8, right: 28 }}>
+      <CardContent className="px-2.5 pb-2">
+        <ResponsiveContainer width="100%" height={180}>
+          <BarChart data={kpis.statusDistribution} layout="vertical" margin={{ left: 10, right: 18 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f0f0f0" />
-            <XAxis type="number" tick={{ fontSize: 10, fill: '#9ca3af' }} />
-            <YAxis type="category" dataKey="label" width={130} tick={{ fontSize: 10, fill: '#6b7280' }} />
+            <XAxis type="number" tick={{ fontSize: 9, fill: '#9ca3af' }} />
+            <YAxis type="category" dataKey="label" width={90} tick={{ fontSize: 9, fill: '#6b7280' }} />
             <Tooltip content={<CustomTooltip />} />
             <Bar dataKey="count" name="Órdenes" radius={[0, 4, 4, 0]} activeBar={false}>
               {kpis.statusDistribution.map((_, i) => (
@@ -78,13 +78,13 @@ export const RevenueByDayChart = memo(({ kpis }: ChartsProps) => {
   const data = kpis.ordersByDay.map(d => ({ ...d, date: d.date.slice(5) }));
   return (
     <Card className="border border-gray-100 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold text-gray-700">Ingresos por Día</CardTitle>
-        <CardDescription className="text-xs text-gray-400">Evolución diaria de ingresos</CardDescription>
+      <CardHeader className="pb-1 px-2.5 pt-2">
+        <CardTitle className="text-xs font-semibold text-gray-700">Ingresos por Día</CardTitle>
+        <CardDescription className="text-[9px] text-gray-400">Evolución diaria de ingresos</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={260}>
-          <AreaChart data={data} margin={{ top: 8, right: 16, left: 8, bottom: 0 }}>
+      <CardContent className="px-2.5 pb-2">
+        <ResponsiveContainer width="100%" height={180}>
+          <AreaChart data={data} margin={{ top: 8, right: 12, left: 8, bottom: 0 }}>
             <defs>
               <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#6A5CBC" stopOpacity={0.3} />
@@ -92,13 +92,13 @@ export const RevenueByDayChart = memo(({ kpis }: ChartsProps) => {
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="date" tick={{ fontSize: 9, fill: '#9ca3af' }} interval="preserveStartEnd" />
-            <YAxis tick={{ fontSize: 9, fill: '#9ca3af' }} tickFormatter={v => `S/${v}`} />
+            <XAxis dataKey="date" tick={{ fontSize: 8, fill: '#9ca3af' }} interval="preserveStartEnd" />
+            <YAxis tick={{ fontSize: 8, fill: '#9ca3af' }} tickFormatter={v => `S/${v}`} />
             <Tooltip
               formatter={(v: any) => [formatCurrency(v || 0), 'Ingresos']}
-              contentStyle={{ fontSize: 11, borderRadius: 6, border: '1px solid #e5e7eb' }}
+              contentStyle={{ fontSize: 10, borderRadius: 6, border: '1px solid #e5e7eb' }}
             />
-            <Area type="monotone" dataKey="revenue" name="Ingresos" stroke="#6A5CBC" strokeWidth={2.5} fill="url(#revGrad)" />
+            <Area type="monotone" dataKey="revenue" name="Ingresos" stroke="#6A5CBC" strokeWidth={2} fill="url(#revGrad)" />
           </AreaChart>
         </ResponsiveContainer>
       </CardContent>
@@ -112,27 +112,27 @@ export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
   const data = kpis.paymentDistribution.slice(0, 7);
   return (
     <Card className="border border-gray-100 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold text-gray-700">Métodos de Pago</CardTitle>
-        <CardDescription className="text-xs text-gray-400">Distribución por forma de pago</CardDescription>
+      <CardHeader className="pb-1 px-2.5 pt-2">
+        <CardTitle className="text-xs font-semibold text-gray-700">Métodos de Pago</CardTitle>
+        <CardDescription className="text-[9px] text-gray-400">Distribución por forma de pago</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={280}>
+      <CardContent className="px-2.5 pb-2">
+        <ResponsiveContainer width="100%" height={200}>
           <PieChart>
             <Pie
               data={data}
               cx="50%"
               cy="48%"
-              innerRadius={55}
-              outerRadius={85}
-              paddingAngle={3}
+              innerRadius={38}
+              outerRadius={58}
+              paddingAngle={2}
               dataKey="count"
               nameKey="name"
               isAnimationActive={false}
               label={({ cx, cy, midAngle, outerRadius, percent }) => {
                 if (percent === undefined || midAngle === undefined) return null;
                 const RADIAN = Math.PI / 180;
-                const radius = outerRadius + 28;
+                const radius = outerRadius + 18;
                 const x = Number(cx) + radius * Math.cos(-midAngle * RADIAN);
                 const y = Number(cy) + radius * Math.sin(-midAngle * RADIAN);
                 return (
@@ -142,21 +142,21 @@ export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
                     fill="#1D252D"
                     textAnchor={x > cx ? 'start' : 'end'}
                     dominantBaseline="central"
-                    className="text-xs font-bold"
+                    className="text-[10px] font-bold"
                   >
                     {`${(percent * 100).toFixed(1)}%`}
                   </text>
                 );
               }}
-              labelLine={{ stroke: '#9ca3af', strokeWidth: 1.5 }}
+              labelLine={{ stroke: '#9ca3af', strokeWidth: 0.8 }}
             >
               {data.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
             </Pie>
             <Tooltip
               formatter={(v: any) => [v || 0, 'Órdenes']}
-              contentStyle={{ fontSize: 11, borderRadius: 8, border: '1px solid #e5e7eb' }}
+              contentStyle={{ fontSize: 10, borderRadius: 8, border: '1px solid #e5e7eb' }}
             />
-            <Legend wrapperStyle={{ fontSize: 10, paddingTop: 8 }} />
+            <Legend wrapperStyle={{ fontSize: 9, paddingTop: 5 }} />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>
@@ -170,20 +170,20 @@ export const OrdersByHourChart = memo(({ kpis }: ChartsProps) => {
   const peak = kpis.ordersByHour.reduce((m, h) => h.count > m.count ? h : m, kpis.ordersByHour[0]);
   return (
     <Card className="border border-gray-100 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold text-gray-700">Órdenes por Hora</CardTitle>
-        <CardDescription className="text-xs text-gray-400">
+      <CardHeader className="pb-1 px-2.5 pt-2">
+        <CardTitle className="text-xs font-semibold text-gray-700">Órdenes por Hora</CardTitle>
+        <CardDescription className="text-[9px] text-gray-400">
           Hora pico: <span className="font-medium text-[#6A5CBC]">{peak?.hour}</span> ({peak?.count} órdenes)
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={180}>
-          <BarChart data={kpis.ordersByHour} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
+      <CardContent className="px-2.5 pb-2">
+        <ResponsiveContainer width="100%" height={130}>
+          <BarChart data={kpis.ordersByHour} margin={{ top: 5, right: 8, left: -16, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="hour" tick={{ fontSize: 8, fill: '#9ca3af' }} interval={3} />
-            <YAxis tick={{ fontSize: 9, fill: '#9ca3af' }} />
-            <Tooltip contentStyle={{ fontSize: 10, borderRadius: 6, border: '1px solid #e5e7eb' }} />
-            <Bar dataKey="count" name="Órdenes" radius={[3, 3, 0, 0]} activeBar={false}>
+            <XAxis dataKey="hour" tick={{ fontSize: 7, fill: '#9ca3af' }} interval={3} />
+            <YAxis tick={{ fontSize: 8, fill: '#9ca3af' }} />
+            <Tooltip contentStyle={{ fontSize: 9, borderRadius: 6, border: '1px solid #e5e7eb' }} />
+            <Bar dataKey="count" name="Órdenes" radius={[2, 2, 0, 0]} activeBar={false}>
               {kpis.ordersByHour.map((entry, i) => (
                 <Cell key={i} fill={entry.count === peak?.count ? '#6A5CBC' : '#C4BEE4'} />
               ))}
@@ -200,21 +200,21 @@ OrdersByHourChart.displayName = 'OrdersByHourChart';
 export const TopClientsChart = memo(({ kpis }: ChartsProps) => {
   return (
     <Card className="border border-gray-100 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold text-gray-700">Top Clientes</CardTitle>
-        <CardDescription className="text-xs text-gray-400">Por ingresos generados</CardDescription>
+      <CardHeader className="pb-1 px-2.5 pt-2">
+        <CardTitle className="text-xs font-semibold text-gray-700">Top Clientes</CardTitle>
+        <CardDescription className="text-[9px] text-gray-400">Por ingresos generados</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={kpis.topClients.slice(0, 8)} layout="vertical" margin={{ left: 8, right: 32 }}>
+      <CardContent className="px-2.5 pb-2">
+        <ResponsiveContainer width="100%" height={180}>
+          <BarChart data={kpis.topClients.slice(0, 8)} layout="vertical" margin={{ left: 10, right: 22 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f0f0f0" />
-            <XAxis type="number" tick={{ fontSize: 9, fill: '#9ca3af' }} tickFormatter={v => `S/${v}`} />
-            <YAxis type="category" dataKey="name" width={120}
-              tick={{ fontSize: 9, fill: '#6b7280' }}
-              tickFormatter={(v: string) => v.length > 18 ? v.slice(0, 18) + '…' : v}
+            <XAxis type="number" tick={{ fontSize: 8, fill: '#9ca3af' }} tickFormatter={v => `S/${v}`} />
+            <YAxis type="category" dataKey="name" width={85}
+              tick={{ fontSize: 8, fill: '#6b7280' }}
+              tickFormatter={(v: string) => v.length > 13 ? v.slice(0, 13) + '…' : v}
             />
-            <Tooltip formatter={(v: any) => [formatCurrency(v || 0), 'Ingresos']} contentStyle={{ fontSize: 11, borderRadius: 6, border: '1px solid #e5e7eb' }} />
-            <Bar dataKey="revenue" name="Ingresos" radius={[0, 4, 4, 0]} activeBar={false}>
+            <Tooltip formatter={(v: any) => [formatCurrency(v || 0), 'Ingresos']} contentStyle={{ fontSize: 10, borderRadius: 6, border: '1px solid #e5e7eb' }} />
+            <Bar dataKey="revenue" name="Ingresos" radius={[0, 3, 3, 0]} activeBar={false}>
               {kpis.topClients.slice(0, 8).map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
             </Bar>
           </BarChart>
@@ -243,44 +243,44 @@ export const TopProductsChart = memo(({ products, loading }: TopProductsProps) =
 
   return (
     <Card className="border border-gray-100 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold text-gray-700">
+      <CardHeader className="pb-0.5 px-2 pt-1.5">
+        <CardTitle className="text-[10px] font-semibold text-gray-700">
           Productos Más Pedidos
-          {loading && <span className="ml-2 text-xs font-normal text-gray-400 animate-pulse">Cargando...</span>}
+          {loading && <span className="ml-2 text-[9px] font-normal text-gray-400 animate-pulse">Cargando...</span>}
         </CardTitle>
-        <CardDescription className="text-xs text-gray-400">
+        <CardDescription className="text-[8px] text-gray-400">
           Top 12 productos por unidades vendidas (últimas 100 órdenes)
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2 pb-1.5">
         {loading || data.length === 0 ? (
-          <div className="flex items-center justify-center h-60 text-gray-300 text-sm">
+          <div className="flex items-center justify-center h-40 text-gray-300 text-xs">
             {loading ? (
               <div className="flex flex-col items-center gap-2">
-                <div className="animate-spin h-6 w-6 border-2 border-blue-400 border-t-transparent rounded-full" />
-                <p className="text-xs text-gray-400">Cargando datos de productos...</p>
+                <div className="animate-spin h-5 w-5 border-2 border-blue-400 border-t-transparent rounded-full" />
+                <p className="text-[9px] text-gray-400">Cargando datos de productos...</p>
               </div>
             ) : 'Sin datos de productos'}
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={CHART_CONFIG.CHART_HEIGHT}>
-            <BarChart data={data} layout="vertical" margin={{ left: 8, right: 40 }}>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={data} layout="vertical" margin={{ left: 8, right: 28 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f0f0f0" />
-              <XAxis type="number" tick={{ fontSize: 9, fill: '#9ca3af' }} />
+              <XAxis type="number" tick={{ fontSize: 7, fill: '#9ca3af' }} />
               <YAxis
                 type="category"
                 dataKey="name"
-                width={CHART_CONFIG.Y_AXIS_WIDTH}
-                tick={{ fontSize: 9.5, fill: '#374151' }}
+                width={140}
+                tick={{ fontSize: 7.5, fill: '#374151' }}
               />
               <Tooltip
                 content={({ active, payload }) => {
                   if (!active || !payload?.length) return null;
                   const d = payload[0]?.payload;
                   return (
-                    <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3 text-xs max-w-[240px]">
-                      <p className="font-semibold text-gray-700 mb-1 leading-snug">{d.fullName}</p>
-                      <p className="text-violet-600 text-[10px] mb-1">{d.category}</p>
+                    <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-2 text-[9px] max-w-[200px]">
+                      <p className="font-semibold text-gray-700 mb-0.5 leading-snug">{d.fullName}</p>
+                      <p className="text-violet-600 text-[8px] mb-0.5">{d.category}</p>
                       <p className="text-emerald-600">Unidades: <b>{d.qty}</b></p>
                       <p className="text-blue-600">Ingresos: <b>{formatCurrency(d.revenue)}</b></p>
                       <p className="text-gray-500">En órdenes: <b>{d.orders}</b></p>
@@ -288,7 +288,7 @@ export const TopProductsChart = memo(({ products, loading }: TopProductsProps) =
                   );
                 }}
               />
-              <Bar dataKey="qty" name="Unidades" radius={[0, 4, 4, 0]} activeBar={false}>
+              <Bar dataKey="qty" name="Unidades" radius={[0, 2, 2, 0]} activeBar={false}>
                 {data.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Bar>
             </BarChart>
@@ -310,23 +310,23 @@ export const RevenueByStatusChart = memo(({ kpis }: ChartsProps) => {
 
   return (
     <Card className="border border-gray-100 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold text-gray-700">Ingresos por Estado</CardTitle>
-        <CardDescription className="text-xs text-gray-400">Ingresos vs cantidad de órdenes por estado</CardDescription>
+      <CardHeader className="pb-0.5 px-2 pt-1.5">
+        <CardTitle className="text-[10px] font-semibold text-gray-700">Ingresos por Estado</CardTitle>
+        <CardDescription className="text-[8px] text-gray-400">Ingresos vs cantidad de órdenes por estado</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={240}>
-          <BarChart data={data} margin={{ top: 8, right: 16, left: 8, bottom: 0 }}>
+      <CardContent className="px-2 pb-1.5">
+        <ResponsiveContainer width="100%" height={145}>
+          <BarChart data={data} margin={{ top: 6, right: 10, left: 6, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="label" tick={{ fontSize: 9, fill: '#6b7280' }}
-              tickFormatter={(v: string) => v.length > 10 ? v.slice(0, 10) + '…' : v}
+            <XAxis dataKey="label" tick={{ fontSize: 7, fill: '#6b7280' }}
+              tickFormatter={(v: string) => v.length > 8 ? v.slice(0, 8) + '…' : v}
             />
-            <YAxis yAxisId="l" tick={{ fontSize: 9, fill: '#9ca3af' }} tickFormatter={v => `S/${v}`} />
-            <YAxis yAxisId="r" orientation="right" tick={{ fontSize: 9, fill: '#9ca3af' }} />
+            <YAxis yAxisId="l" tick={{ fontSize: 7, fill: '#9ca3af' }} tickFormatter={v => `S/${v}`} />
+            <YAxis yAxisId="r" orientation="right" tick={{ fontSize: 7, fill: '#9ca3af' }} />
             <Tooltip content={<CustomTooltip />} />
-            <Legend wrapperStyle={{ fontSize: 10 }} />
-            <Bar yAxisId="l" dataKey="ingresos" name="Ingresos" fill="#6A5CBC" radius={[3, 3, 0, 0]} activeBar={false} />
-            <Bar yAxisId="r" dataKey="ordenes" name="Órdenes" fill="#8A74E0" radius={[3, 3, 0, 0]} activeBar={false} />
+            <Legend wrapperStyle={{ fontSize: 8 }} />
+            <Bar yAxisId="l" dataKey="ingresos" name="Ingresos" fill="#6A5CBC" radius={[2, 2, 0, 0]} activeBar={false} />
+            <Bar yAxisId="r" dataKey="ordenes" name="Órdenes" fill="#8A74E0" radius={[2, 2, 0, 0]} activeBar={false} />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
@@ -354,21 +354,21 @@ export const MonthlyRevenueChart = memo(({ kpis }: ChartsProps) => {
 
   return (
     <Card className="border border-gray-100 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold text-gray-700">Ingresos Mensuales</CardTitle>
-        <CardDescription className="text-xs text-gray-400">Desde noviembre 2025</CardDescription>
+      <CardHeader className="pb-0.5 px-2 pt-1.5">
+        <CardTitle className="text-[10px] font-semibold text-gray-700">Ingresos Mensuales</CardTitle>
+        <CardDescription className="text-[8px] text-gray-400">Desde noviembre 2025</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={220}>
-          <BarChart data={data} margin={{ top: 8, right: 16, left: 8, bottom: 0 }}>
+      <CardContent className="px-2 pb-1.5">
+        <ResponsiveContainer width="100%" height={135}>
+          <BarChart data={data} margin={{ top: 6, right: 10, left: 6, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#6b7280' }} />
-            <YAxis tick={{ fontSize: 9, fill: '#9ca3af' }} tickFormatter={v => `S/${v}`} />
+            <XAxis dataKey="month" tick={{ fontSize: 8, fill: '#6b7280' }} />
+            <YAxis tick={{ fontSize: 7, fill: '#9ca3af' }} tickFormatter={v => `S/${v}`} />
             <Tooltip
               formatter={(v: any) => [formatCurrency(v || 0), 'Ingresos']}
-              contentStyle={{ fontSize: 11, borderRadius: 6, border: '1px solid #e5e7eb' }}
+              contentStyle={{ fontSize: 9, borderRadius: 6, border: '1px solid #e5e7eb' }}
             />
-            <Bar dataKey="revenue" name="Ingresos" radius={[4, 4, 0, 0]} activeBar={false}>
+            <Bar dataKey="revenue" name="Ingresos" radius={[2, 2, 0, 0]} activeBar={false}>
               {data.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
             </Bar>
           </BarChart>
@@ -391,14 +391,14 @@ export const CategoryPerformanceRadar = memo(({ categoryStats, loading }: Catego
   if (top6.length === 0) {
     return (
       <Card className="border border-gray-100 shadow-sm">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-semibold text-gray-700">Rendimiento de Categorías</CardTitle>
-          <CardDescription className="text-xs text-gray-400">Comparativa normalizada (top 6)</CardDescription>
+        <CardHeader className="pb-0.5 px-2 pt-1.5">
+          <CardTitle className="text-[10px] font-semibold text-gray-700">Rendimiento de Categorías</CardTitle>
+          <CardDescription className="text-[8px] text-gray-400">Comparativa normalizada (top 6)</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center h-56 text-gray-300 text-sm">
+        <CardContent className="px-2 pb-1.5">
+          <div className="flex items-center justify-center h-36 text-gray-300 text-xs">
             {loading
-              ? <div className="animate-spin h-6 w-6 border-2 border-violet-400 border-t-transparent rounded-full" />
+              ? <div className="animate-spin h-5 w-5 border-2 border-violet-400 border-t-transparent rounded-full" />
               : 'Sin datos de categorías'}
           </div>
         </CardContent>
@@ -419,28 +419,28 @@ export const CategoryPerformanceRadar = memo(({ categoryStats, loading }: Catego
 
   return (
     <Card className="border border-gray-100 shadow-sm">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-semibold text-gray-700">Rendimiento de Categorías</CardTitle>
-        <CardDescription className="text-xs text-gray-400">Comparativa normalizada (top 6 categorías)</CardDescription>
+      <CardHeader className="pb-0.5 px-2 pt-1.5">
+        <CardTitle className="text-[10px] font-semibold text-gray-700">Rendimiento de Categorías</CardTitle>
+        <CardDescription className="text-[8px] text-gray-400">Comparativa normalizada (top 6 categorías)</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2 pb-1.5">
         {loading ? (
-          <div className="flex items-center justify-center h-56">
-            <div className="animate-spin h-6 w-6 border-2 border-violet-400 border-t-transparent rounded-full" />
+          <div className="flex items-center justify-center h-36">
+            <div className="animate-spin h-5 w-5 border-2 border-violet-400 border-t-transparent rounded-full" />
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={280}>
+          <ResponsiveContainer width="100%" height={180}>
             <RadarChart data={data}>
               <PolarGrid stroke="#e5e7eb" />
-              <PolarAngleAxis dataKey="subject" tick={{ fontSize: 9, fill: '#6b7280' }} />
-              <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 8, fill: '#d1d5db' }} />
+              <PolarAngleAxis dataKey="subject" tick={{ fontSize: 7, fill: '#6b7280' }} />
+              <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 6, fill: '#d1d5db' }} />
               <Radar name="Unidades" dataKey="Unidades" stroke="#6A5CBC" fill="#6A5CBC" fillOpacity={0.25} />
               <Radar name="Ingresos" dataKey="Ingresos" stroke="#8A74E0" fill="#8A74E0" fillOpacity={0.2} />
               <Radar name="Órdenes" dataKey="Órdenes" stroke="#9E88FD" fill="#9E88FD" fillOpacity={0.15} />
-              <Legend wrapperStyle={{ fontSize: 10 }} />
+              <Legend wrapperStyle={{ fontSize: 8 }} />
               <Tooltip
                 formatter={(v: any, name: any) => [`${v}%`, name]}
-                contentStyle={{ fontSize: 11, borderRadius: 6, border: '1px solid #e5e7eb' }}
+                contentStyle={{ fontSize: 9, borderRadius: 6, border: '1px solid #e5e7eb' }}
               />
             </RadarChart>
           </ResponsiveContainer>

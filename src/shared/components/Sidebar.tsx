@@ -57,7 +57,7 @@ export const Sidebar = memo(({
 
   return (
     <aside 
-      className={`${isCollapsed ? 'w-20' : 'w-64'} bg-white border-r border-gray-200 flex-shrink-0 h-screen overflow-hidden flex flex-col will-change-[width]`}
+      className={`${isCollapsed ? 'w-16' : 'w-52'} bg-white border-r border-gray-200 flex-shrink-0 h-screen overflow-hidden flex flex-col will-change-[width]`}
       style={{ 
         transition: 'width 200ms cubic-bezier(0.4, 0, 0.2, 1)',
         transform: 'translateZ(0)',
@@ -65,35 +65,35 @@ export const Sidebar = memo(({
       }}
     >
       {/* Header with Logo */}
-      <div className={`p-4 border-b border-gray-200 ${isCollapsed ? 'flex justify-center' : ''}`}>
+      <div className={`p-2.5 border-b border-gray-200 ${isCollapsed ? 'flex justify-center' : ''}`}>
         {isCollapsed ? (
           <button
             onClick={onToggleCollapse}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <Menu className="h-5 w-5 text-gray-600" />
+            <Menu className="h-4 w-4 text-gray-600" />
           </button>
         ) : (
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img src="/Farma-logo3.svg" alt="FarmaGo" className="h-10 w-10" />
+            <div className="flex items-center gap-2">
+              <img src="/Farma-logo3.svg" alt="FarmaGo" className="h-8 w-8" />
               <div>
-                <h1 className="text-sm font-bold text-gray-900">FarmaGo</h1>
-                <p className="text-[10px] text-gray-400">Dashboard</p>
+                <h1 className="text-xs font-bold text-gray-900">FarmaGo</h1>
+                <p className="text-[9px] text-gray-400">Dashboard</p>
               </div>
             </div>
             <button
               onClick={onToggleCollapse}
-              className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <Menu className="h-4 w-4 text-gray-600" />
+              <Menu className="h-3.5 w-3.5 text-gray-600" />
             </button>
           </div>
         )}
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+      <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -102,21 +102,21 @@ export const Sidebar = memo(({
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`w-full flex items-center ${isCollapsed ? 'justify-center px-2' : 'gap-3 px-3'} py-2.5 rounded-lg transition-colors duration-150 group ${
+              className={`w-full flex items-center ${isCollapsed ? 'justify-center px-1.5' : 'gap-2 px-2'} py-2 rounded-lg transition-colors duration-150 group ${
                 isActive
                   ? 'bg-blue-50 text-blue-700 font-medium'
                   : 'text-gray-600 hover:bg-gray-50'
               }`}
               title={isCollapsed ? tab.label : undefined}
             >
-              <Icon className={`h-5 w-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-blue-700' : 'text-gray-400 group-hover:text-gray-600'}`} />
+              <Icon className={`h-4 w-4 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-blue-700' : 'text-gray-400 group-hover:text-gray-600'}`} />
               {!isCollapsed && (
                 <>
-                  <span className="text-sm flex-1 text-left whitespace-nowrap">
+                  <span className="text-xs flex-1 text-left whitespace-nowrap">
                     {tab.label}
                   </span>
                   {tab.badge !== undefined && (
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${
+                    <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap ${
                       isActive ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
                     }`}>
                       {tab.badge.toLocaleString()}
@@ -133,19 +133,19 @@ export const Sidebar = memo(({
       {!isCollapsed && (
         <>
           <Separator />
-          <div className="p-3 space-y-2">
+          <div className="p-2 space-y-1.5">
             {/* Connection Status */}
-            <div className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs ${
+            <div className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-[10px] ${
               connected ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'
             }`}>
               {connected ? (
                 <>
-                  <Wifi className="h-3.5 w-3.5" />
+                  <Wifi className="h-3 w-3" />
                   <span className="font-medium">En línea</span>
                 </>
               ) : (
                 <>
-                  <WifiOff className="h-3.5 w-3.5" />
+                  <WifiOff className="h-3 w-3" />
                   <span className="font-medium">Desconectado</span>
                 </>
               )}
@@ -153,8 +153,8 @@ export const Sidebar = memo(({
 
             {/* Last Updated */}
             {lastUpdated && (
-              <div className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-500">
-                <Clock className="h-3.5 w-3.5" />
+              <div className="flex items-center gap-1.5 px-2 py-1 text-[10px] text-gray-500">
+                <Clock className="h-3 w-3" />
                 <span>{lastUpdated.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })}</span>
               </div>
             )}
@@ -165,9 +165,9 @@ export const Sidebar = memo(({
               size="sm"
               onClick={onRefresh}
               disabled={refreshing}
-              className="w-full text-xs gap-2"
+              className="w-full text-[10px] gap-1.5 h-7"
             >
-              <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-3 w-3 ${refreshing ? 'animate-spin' : ''}`} />
               Actualizar
             </Button>
           </div>
@@ -176,16 +176,16 @@ export const Sidebar = memo(({
 
       {/* Collapsed Footer */}
       {isCollapsed && (
-        <div className="p-3 border-t border-gray-200 flex flex-col items-center gap-2">
+        <div className="p-2 border-t border-gray-200 flex flex-col items-center gap-1.5">
           <button
             onClick={onRefresh}
             disabled={refreshing}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
             title="Actualizar"
           >
-            <RefreshCw className={`h-4 w-4 text-gray-600 ${refreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-3.5 w-3.5 text-gray-600 ${refreshing ? 'animate-spin' : ''}`} />
           </button>
-          <div className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-500' : 'bg-red-500'}`} title={connected ? 'En línea' : 'Desconectado'} />
+          <div className={`w-1.5 h-1.5 rounded-full ${connected ? 'bg-emerald-500' : 'bg-red-500'}`} title={connected ? 'En línea' : 'Desconectado'} />
         </div>
       )}
     </aside>
