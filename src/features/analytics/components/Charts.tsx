@@ -110,6 +110,10 @@ RevenueByDayChart.displayName = 'RevenueByDayChart';
 // ── Payment Methods ─────────────────────────────────────────────────────────
 export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
   const data = kpis.paymentDistribution.slice(0, 7);
+  
+  // Calcular el total para obtener porcentajes
+  const total = data.reduce((sum, item) => sum + item.count, 0);
+  
   return (
     <Card className="border border-gray-100 shadow-sm">
       <CardHeader className="pb-1 px-2.5 pt-2">
@@ -117,22 +121,27 @@ export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
         <CardDescription className="text-[9px] text-gray-400">Distribución por forma de pago</CardDescription>
       </CardHeader>
       <CardContent className="px-2.5 pb-2">
-        <ResponsiveContainer width="100%" height={200}>
+        <ResponsiveContainer width="100%" height={220}>
           <PieChart>
             <Pie
               data={data}
               cx="50%"
-              cy="50%"
-              innerRadius={38}
-              outerRadius={58}
-              paddingAngle={2}
+              cy="45%"
+              innerRadius={35}
+              outerRadius={55}
+              paddingAngle={3}
               dataKey="count"
               nameKey="name"
               isAnimationActive={false}
-              label={({ cx, cy, midAngle, outerRadius, percent }) => {
-                if (percent === undefined || midAngle === undefined || percent < 0.05) return null; // No mostrar si es menor al 5%
+              label={({ cx, cy, midAngle, outerRadius, percent, index }) => {
+                if (percent === undefined || midAngle === undefined) return null;
+                
+                // Solo mostrar etiqueta si el porcentaje es mayor al 3%
+                if (percent < 0.03) return null;
+                
                 const RADIAN = Math.PI / 180;
-                const radius = outerRadius + 22;
+                // Aumentar la distancia de las etiquetas
+                const radius = outerRadius + 28;
                 const x = Number(cx) + radius * Math.cos(-midAngle * RADIAN);
                 const y = Number(cy) + radius * Math.sin(-midAngle * RADIAN);
                 
@@ -140,10 +149,14 @@ export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
                   <text
                     x={x}
                     y={y}
-                    fill="#1D252D"
+                    fill="#1F2937"
                     textAnchor={x > cx ? 'start' : 'end'}
                     dominantBaseline="central"
-                    className="text-[10px] font-bold"
+                    style={{ 
+                      fontSize: '11px', 
+                      fontWeight: 'bold',
+                      textShadow: '0 0 3px white, 0 0 3px white'
+                    }}
                   >
                     {`${(percent * 100).toFixed(1)}%`}
                   </text>
@@ -151,19 +164,26 @@ export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
               }}
               labelLine={{
                 stroke: '#9ca3af',
-                strokeWidth: 1,
+                strokeWidth: 1.5,
               }}
             >
               {data.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
             </Pie>
             <Tooltip
-              formatter={(v: any) => [v || 0, 'Órdenes']}
+              formatter={(v: any, name: any) => {
+                const percentage = ((v / total) * 100).toFixed(1);
+                return [`${v} órdenes (${percentage}%)`, name];
+              }}
               contentStyle={{ fontSize: 10, borderRadius: 8, border: '1px solid #e5e7eb' }}
             />
             <Legend 
-              wrapperStyle={{ fontSize: 9, paddingTop: 5 }} 
+              wrapperStyle={{ fontSize: 9, paddingTop: 8 }} 
               iconSize={8}
-              formatter={(value) => value.length > 20 ? value.slice(0, 20) + '...' : value}
+              formatter={(value) => {
+                // Truncar nombres largos
+                if (value.length > 22) return value.slice(0, 22) + '...';
+                return value;
+              }}
             />
           </PieChart>
         </ResponsiveContainer>
