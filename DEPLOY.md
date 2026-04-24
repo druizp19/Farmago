@@ -2,7 +2,7 @@
 
 **Servidor**: 190.187.184.138  
 **Usuario**: denis  
-**Ruta del proyecto**: /home/denis/Documents/Farmago  
+**Ruta del proyecto**: /var/www/farmago  
 **Dashboard**: http://190.187.184.138  
 **API**: http://190.187.184.138:3001
 
@@ -34,30 +34,54 @@ redis-cli ping  # Debe responder PONG
 
 ---
 
-## 📁 2. Verificar el Proyecto
+## 📁 2. Preparar Directorio del Proyecto
 
 ```bash
-# Ir al directorio del proyecto
-cd /home/denis/Documents/Farmago
+# Crear directorio en /var/www
+sudo mkdir -p /var/www/farmago
 
-# Verificar que existe
-pwd
-ls -la
+# Dar permisos al usuario denis
+sudo chown -R denis:www-data /var/www/farmago
+sudo chmod -R 755 /var/www/farmago
+
+# Ir al directorio
+cd /var/www/farmago
 ```
 
 ---
 
-## ⚙️ 3. Configurar Variables de Entorno
+## 📤 3. Subir el Proyecto
+
+**Opción A: Copiar desde tu ubicación actual**
+```bash
+# Si ya tienes el proyecto en /home/denis/Documents/Farmago
+sudo cp -r /home/denis/Documents/Farmago/* /var/www/farmago/
+sudo chown -R denis:www-data /var/www/farmago
+```
+
+**Opción B: Subir archivos directamente**
+- Usar WinSCP, FileZilla o el panel de control
+- Subir toda la carpeta del proyecto a `/var/www/farmago`
+
+**Opción C: Con Git**
+```bash
+cd /var/www/farmago
+git clone https://github.com/tu-usuario/farmago-dashboard.git .
+```
+
+---
+
+## ⚙️ 4. Configurar Variables de Entorno
 
 ```bash
 # Ir al directorio del proyecto
-cd /home/denis/Documents/Farmago
+cd /var/www/farmago
 
 # Crear archivo .env
 nano .env
 ```
 
-Pegar este contenido EXACTO:
+Pegar este contenido:
 ```
 VTEX_ACCOUNT=medifarmape
 VTEX_APP_KEY=vtexappkey-medifarmape-TISBGF
@@ -78,11 +102,11 @@ cat .env
 
 ---
 
-## 🔨 4. Compilar el Proyecto
+## 🔨 5. Compilar el Proyecto
 
 ```bash
 # Asegurarse de estar en el directorio correcto
-cd /home/denis/Documents/Farmago
+cd /var/www/farmago
 
 # Instalar dependencias del frontend
 npm install
@@ -103,11 +127,15 @@ cd ..
 # Verificar que se crearon las carpetas
 ls -la dist/           # Frontend compilado
 ls -la server/dist/    # Backend compilado
+
+# Dar permisos correctos
+sudo chown -R denis:www-data /var/www/farmago
+sudo chmod -R 755 /var/www/farmago
 ```
 
 ---
 
-## 🌐 5. Configurar Nginx
+## 🌐 6. Configurar Nginx
 
 ```bash
 # Crear archivo de configuración
@@ -123,7 +151,7 @@ server {
 
     # Frontend estático
     location / {
-        root /home/denis/Documents/Farmago/dist;
+        root /var/www/farmago/dist;
         try_files $uri $uri/ /index.html;
         
         add_header X-Frame-Options "SAMEORIGIN" always;
@@ -170,7 +198,7 @@ sudo systemctl restart nginx
 
 ---
 
-## 🔧 6. Configurar Backend como Servicio
+## 🔧 7. Configurar Backend como Servicio
 
 ```bash
 # Crear archivo de servicio
@@ -187,8 +215,8 @@ After=network.target redis-server.service
 [Service]
 Type=simple
 User=denis
-WorkingDirectory=/home/denis/Documents/Farmago/server
-EnvironmentFile=/home/denis/Documents/Farmago/.env
+WorkingDirectory=/var/www/farmago/server
+EnvironmentFile=/var/www/farmago/.env
 Environment=NODE_ENV=production
 Environment=PORT=3001
 ExecStart=/usr/bin/node dist/index.js
@@ -218,7 +246,7 @@ sudo systemctl status farmago-backend
 
 ---
 
-## 🔒 7. Configurar Firewall
+## 🔒 8. Configurar Firewall
 
 ```bash
 # Permitir HTTP
@@ -239,12 +267,15 @@ sudo ufw status
 
 ---
 
-## ✅ 8. Verificar Instalación
+## ✅ 9. Verificar Instalación
 
 ```bash
 # Verificar backend
 curl http://localhost:3001/api/health
 # Debe responder: {"status":"ok"}
+
+# Verificar frontend
+curl http://localhost/ | head -20
 
 # Verificar logs del backend
 sudo journalctl -u farmago-backend -n 20
@@ -261,55 +292,35 @@ redis-cli ping
 
 ---
 
-## 🐛 Solución de Problemas
-
-### Error: "Missing required environment variables" (TU ERROR ACTUAL)
+## 🔄 Actualizar la Aplicación
 
 ```bash
-# 1. Ir al directorio del proyecto
-cd /home/denis/Documents/Farmago
+# Ir al directorio del proyecto
+cd /var/www/farmago
 
-# 2. Verificar que .env existe
-ls -la .env
+# Descargar cambios (si usas Git)
+git pull origin main
 
-# 3. Si no existe, crearlo
-nano .env
-```
+# Instalar dependencias (si hay cambios)
+npm install
+cd server && npm install && cd ..
 
-Pegar:
-```
-VTEX_ACCOUNT=medifarmape
-VTEX_APP_KEY=vtexappkey-medifarmape-TISBGF
-VTEX_APP_TOKEN=UTSFLETYSPKLCZKJFMCVXMSDMKOQEZVKYCDQWCNZVQYMWBPIZHOVPXHIWAHLUOCIESAGXGYOGMINTBXPOSMRDIEOOOUPMIUQXEHFKPZINLUNRWTKUGRLAZXMSXKJRBSB
-PORT=3001
-NODE_ENV=production
-CORS_ORIGINS=http://190.187.184.138,http://190.187.184.138:80,http://localhost:5173
-REDIS_URL=redis://localhost:6379
-VITE_API_URL=http://190.187.184.138:3001
-```
+# Recompilar
+npm run build
+cd server && npm run build && cd ..
 
-```bash
-# 4. Verificar contenido
-cat .env
+# Dar permisos
+sudo chown -R denis:www-data /var/www/farmago
+sudo chmod -R 755 /var/www/farmago
 
-# 5. Verificar que el servicio tiene la ruta correcta
-sudo nano /etc/systemd/system/farmago-backend.service
-```
-
-Debe tener:
-```ini
-WorkingDirectory=/home/denis/Documents/Farmago/server
-EnvironmentFile=/home/denis/Documents/Farmago/.env
-```
-
-```bash
-# 6. Recargar y reiniciar
-sudo systemctl daemon-reload
+# Reiniciar servicios
 sudo systemctl restart farmago-backend
-
-# 7. Ver logs en tiempo real
-sudo journalctl -u farmago-backend -f
+sudo systemctl restart nginx
 ```
+
+---
+
+## 🐛 Solución de Problemas
 
 ### Backend no inicia
 ```bash
@@ -318,6 +329,9 @@ sudo journalctl -u farmago-backend -n 50
 
 # Verificar puerto
 sudo netstat -tulpn | grep 3001
+
+# Verificar .env
+cat /var/www/farmago/.env
 
 # Reiniciar
 sudo systemctl restart farmago-backend
@@ -333,47 +347,39 @@ sudo systemctl start farmago-backend
 ### Error de CORS
 ```bash
 # Verificar .env
-cat /home/denis/Documents/Farmago/.env | grep CORS_ORIGINS
+cat /var/www/farmago/.env | grep CORS_ORIGINS
 # Debe incluir: http://190.187.184.138
 
 # Si no, editar y reiniciar
-nano /home/denis/Documents/Farmago/.env
+nano /var/www/farmago/.env
 sudo systemctl restart farmago-backend
 ```
 
-### Frontend en blanco
+### Frontend en blanco o no carga
 ```bash
-# Verificar que dist/ existe
-ls -la /home/denis/Documents/Farmago/dist/
+# Verificar que dist/ existe y tiene contenido
+ls -la /var/www/farmago/dist/
+ls -la /var/www/farmago/dist/assets/
 
 # Verificar permisos
-sudo chmod -R 755 /home/denis/Documents/Farmago/dist/
+sudo chmod -R 755 /var/www/farmago/dist
 
 # Ver logs de Nginx
 sudo tail -f /var/log/nginx/error.log
+
+# Verificar configuración de Nginx
+sudo nginx -T | grep "root /var/www"
 ```
 
----
-
-## 🔄 Actualizar la Aplicación
-
+### Archivos JS/CSS no cargan (404)
 ```bash
-# Ir al directorio del proyecto
-cd /home/denis/Documents/Farmago
+# Verificar que assets existe
+ls -la /var/www/farmago/dist/assets/
 
-# Descargar cambios (si usas Git)
-git pull origin main
+# Dar permisos
+sudo chmod -R 755 /var/www/farmago/dist
 
-# Instalar dependencias (si hay cambios)
-npm install
-cd server && npm install && cd ..
-
-# Recompilar
-npm run build
-cd server && npm run build && cd ..
-
-# Reiniciar servicios
-sudo systemctl restart farmago-backend
+# Reiniciar Nginx
 sudo systemctl restart nginx
 ```
 
@@ -387,6 +393,7 @@ sudo journalctl -u farmago-backend -f
 
 # Ver logs de Nginx
 sudo tail -f /var/log/nginx/error.log
+sudo tail -f /var/log/nginx/access.log
 
 # Reiniciar backend
 sudo systemctl restart farmago-backend
@@ -403,7 +410,13 @@ sudo systemctl status redis-server
 sudo netstat -tulpn | grep LISTEN
 
 # Ir al directorio del proyecto
-cd /home/denis/Documents/Farmago
+cd /var/www/farmago
+
+# Ver espacio en disco
+df -h
+
+# Ver uso de memoria
+free -h
 ```
 
 ---
@@ -416,7 +429,7 @@ sudo apt install certbot python3-certbot-nginx
 sudo certbot --nginx -d 190.187.184.138
 
 # Actualizar CORS en .env
-nano /home/denis/Documents/Farmago/.env
+nano /var/www/farmago/.env
 # Cambiar a: CORS_ORIGINS=https://190.187.184.138
 sudo systemctl restart farmago-backend
 ```
@@ -428,12 +441,13 @@ sudo systemctl restart farmago-backend
 - [ ] Node.js 18+ instalado
 - [ ] Nginx instalado y corriendo
 - [ ] Redis instalado y corriendo
-- [ ] Proyecto en `/home/denis/Documents/Farmago`
-- [ ] Archivo `.env` creado en `/home/denis/Documents/Farmago/.env`
-- [ ] Frontend compilado (`dist/` existe)
+- [ ] Proyecto en `/var/www/farmago`
+- [ ] Archivo `.env` creado en `/var/www/farmago/.env`
+- [ ] Frontend compilado (`dist/` existe con archivos)
 - [ ] Backend compilado (`server/dist/` existe)
-- [ ] Nginx configurado con ruta correcta
+- [ ] Nginx configurado con ruta `/var/www/farmago/dist`
 - [ ] Servicio systemd configurado con rutas correctas
+- [ ] Permisos correctos (denis:www-data, 755)
 - [ ] Firewall configurado
 - [ ] Dashboard accesible: http://190.187.184.138
 - [ ] API responde: http://190.187.184.138/api/health
@@ -450,3 +464,13 @@ Para ver logs en tiempo real:
 ```bash
 sudo journalctl -u farmago-backend -f
 ```
+
+---
+
+## 📝 Notas Importantes
+
+- **Ruta del proyecto**: `/var/www/farmago` (ubicación estándar para aplicaciones web)
+- **Permisos**: `denis:www-data` con `755` (permite que Nginx lea los archivos)
+- **Frontend**: Servido por Nginx desde `/var/www/farmago/dist`
+- **Backend**: Corriendo como servicio systemd en el puerto 3001
+- **Logs**: Usar `journalctl` para backend y `/var/log/nginx/` para Nginx

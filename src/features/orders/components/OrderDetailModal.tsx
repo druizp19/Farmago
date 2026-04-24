@@ -2,6 +2,7 @@ import { useState, useEffect, memo } from 'react';
 import type { OrderDetail } from '../../../types/orders';
 import { Separator } from '../../../components/ui/separator';
 import { Package, CreditCard, MapPin, User, FileText, X } from 'lucide-react';
+import { API_CONFIG } from '../../../shared/config/constants';
 
 interface OrderDetailModalProps {
   orderId: string | null;
@@ -17,7 +18,7 @@ export const OrderDetailModal = memo(({ orderId, onClose }: OrderDetailModalProp
     if (!orderId) { setOrder(null); return; }
     setLoading(true);
     setError(null);
-    fetch(`http://localhost:3001/api/orders/${orderId}`)
+    fetch(`${API_CONFIG.SERVER_URL}/api/orders/${orderId}`)
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(data => { setOrder(data); setLoading(false); })
       .catch(err => { setError(err.message); setLoading(false); });
