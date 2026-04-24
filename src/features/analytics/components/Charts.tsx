@@ -354,25 +354,56 @@ RevenueByStatusChart.displayName = 'RevenueByStatusChart';
 // ── Monthly Revenue ─────────────────────────────────────────────────────────
 export const MonthlyRevenueChart = memo(({ kpis }: ChartsProps) => {
   const monthMap: Record<string, { revenue: number; count: number }> = {};
+  
+  // Solo procesar los días que realmente están en los datos filtrados
   for (const d of kpis.ordersByDay) {
-    const month = d.date.slice(0, 7);
+    const month = d.date.slice(0, 7); // YYYY-MM
     if (!monthMap[month]) monthMap[month] = { revenue: 0, count: 0 };
     monthMap[month].revenue += d.revenue;
     monthMap[month].count += d.count;
   }
+  
   const data = Object.entries(monthMap)
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([month, { revenue, count }]) => ({
-      month: new Date(month + '-01').toLocaleString('es-PE', { month: 'short', year: '2-digit' }),
-      revenue: revenue,
-      count,
-    }));
+    .map(([month, { revenue, count }]) => {
+      // Usar el string directamente para evitar problemas de zona horaria
+      const [year, monthNum] = month.split('-');
+      const monthDate = new Date(Number(year), Number(monthNum) - 1, 15); // Día 15 para evitar problemas de zona horaria
+      return {
+        month: monthDate.toLocaleString('es-PE', { month: 'short', year: '2-digit' }),
+        fullMonth: month,
+        revenue: revenue,
+        count,
+      };
+    });
+
+  // Determinar el rango de fechas para el subtítulo
+  const months = Object.keys(monthMap).sort();
+  const firstMonth = months[0];
+  const lastMonth = months[months.length - 1];
+  
+  let subtitle = 'Desde noviembre 2025';
+  if (firstMonth && lastMonth) {
+    if (firstMonth === lastMonth) {
+      // Solo un mes
+      const [year, monthNum] = firstMonth.split('-');
+      const monthDate = new Date(Number(year), Number(monthNum) - 1, 15);
+      subtitle = monthDate.toLocaleString('es-PE', { month: 'long', year: 'numeric' });
+    } else {
+      // Rango de meses
+      const [firstYear, firstMonthNum] = firstMonth.split('-');
+      const [lastYear, lastMonthNum] = lastMonth.split('-');
+      const firstDate = new Date(Number(firstYear), Number(firstMonthNum) - 1, 15);
+      const lastDate = new Date(Number(lastYear), Number(lastMonthNum) - 1, 15);
+      subtitle = `${firstDate.toLocaleString('es-PE', { month: 'short', year: 'numeric' })} - ${lastDate.toLocaleString('es-PE', { month: 'short', year: 'numeric' })}`;
+    }
+  }
 
   return (
     <Card className="border border-gray-100 shadow-sm">
       <CardHeader className="pb-0.5 px-2 pt-1.5">
         <CardTitle className="text-[10px] font-semibold text-gray-700">Ingresos Mensuales</CardTitle>
-        <CardDescription className="text-[8px] text-gray-400">Desde noviembre 2025</CardDescription>
+        <CardDescription className="text-[8px] text-gray-400">{subtitle}</CardDescription>
       </CardHeader>
       <CardContent className="px-2 pb-1.5">
         <ResponsiveContainer width="100%" height={135}>
