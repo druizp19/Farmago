@@ -109,80 +109,68 @@ RevenueByDayChart.displayName = 'RevenueByDayChart';
 
 // ── Payment Methods ─────────────────────────────────────────────────────────
 export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
-  const data = kpis.paymentDistribution.slice(0, 7);
-  
-  // Calcular el total para obtener porcentajes
+  const data = kpis.paymentDistribution.slice(0, 6);
   const total = data.reduce((sum, item) => sum + item.count, 0);
-  
+
   return (
     <Card className="border border-gray-100 shadow-sm">
       <CardHeader className="pb-1 px-2.5 pt-2">
         <CardTitle className="text-xs font-semibold text-gray-700">Métodos de Pago</CardTitle>
         <CardDescription className="text-[9px] text-gray-400">Distribución por forma de pago</CardDescription>
       </CardHeader>
-      <CardContent className="px-2.5 pb-2">
-        <ResponsiveContainer width="100%" height={220}>
+      <CardContent className="px-2.5 pb-2 pt-2">
+        <ResponsiveContainer width="100%" height={240}>
           <PieChart>
             <Pie
               data={data}
               cx="50%"
-              cy="45%"
-              innerRadius={35}
-              outerRadius={55}
-              paddingAngle={3}
+              cy="55%"
+              innerRadius={50}
+              outerRadius={80}
+              paddingAngle={2}
               dataKey="count"
               nameKey="name"
               isAnimationActive={false}
-              label={({ cx, cy, midAngle, outerRadius, percent, index }) => {
-                if (percent === undefined || midAngle === undefined) return null;
-                
-                // Solo mostrar etiqueta si el porcentaje es mayor al 3%
-                if (percent < 0.03) return null;
-                
-                const RADIAN = Math.PI / 180;
-                // Aumentar la distancia de las etiquetas
-                const radius = outerRadius + 28;
-                const x = Number(cx) + radius * Math.cos(-midAngle * RADIAN);
-                const y = Number(cy) + radius * Math.sin(-midAngle * RADIAN);
-                
-                return (
-                  <text
-                    x={x}
-                    y={y}
-                    fill="#1F2937"
-                    textAnchor={x > cx ? 'start' : 'end'}
-                    dominantBaseline="central"
-                    style={{ 
-                      fontSize: '11px', 
-                      fontWeight: 'bold',
-                      textShadow: '0 0 3px white, 0 0 3px white'
-                    }}
-                  >
-                    {`${(percent * 100).toFixed(1)}%`}
-                  </text>
-                );
-              }}
-              labelLine={{
-                stroke: '#9ca3af',
-                strokeWidth: 1.5,
-              }}
+              label={false}
             >
-              {data.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+              {data.map((_, i) => (
+                <Cell 
+                  key={`cell-${i}`} 
+                  fill={COLORS[i % COLORS.length]}
+                  stroke="#fff"
+                  strokeWidth={3}
+                />
+              ))}
             </Pie>
             <Tooltip
               formatter={(v: any, name: any) => {
-                const percentage = ((v / total) * 100).toFixed(1);
+                const percentage = ((Number(v) / total) * 100).toFixed(1);
                 return [`${v} órdenes (${percentage}%)`, name];
               }}
-              contentStyle={{ fontSize: 10, borderRadius: 8, border: '1px solid #e5e7eb' }}
+              contentStyle={{ 
+                fontSize: 11, 
+                borderRadius: 8, 
+                border: '1px solid #e5e7eb',
+                padding: '10px 14px'
+              }}
             />
             <Legend 
-              wrapperStyle={{ fontSize: 9, paddingTop: 8 }} 
-              iconSize={8}
-              formatter={(value) => {
-                // Truncar nombres largos
-                if (value.length > 22) return value.slice(0, 22) + '...';
-                return value;
+              layout="horizontal"
+              align="center"
+              verticalAlign="top"
+              wrapperStyle={{ 
+                fontSize: 10,
+                paddingBottom: '12px',
+                lineHeight: '20px'
+              }} 
+              iconSize={10}
+              iconType="square"
+              formatter={(value, entry: any) => {
+                const item = data.find(d => d.name === value);
+                if (!item) return value;
+                const percentage = ((item.count / total) * 100).toFixed(1);
+                const displayName = value.length > 12 ? value.slice(0, 12) + '...' : value;
+                return `${displayName} ${percentage}%`;
               }}
             />
           </PieChart>
