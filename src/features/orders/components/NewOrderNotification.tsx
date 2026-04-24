@@ -121,26 +121,26 @@ export function NewOrderNotification({ orders, onClose }: NewOrderNotificationPr
         className={`fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none`}
       >
         <div
-          className={`bg-gradient-to-br from-emerald-50 to-white rounded-2xl shadow-2xl w-full max-w-lg pointer-events-auto transform transition-all duration-300 ${
+          className={`bg-gradient-to-br from-emerald-50 to-white rounded-xl shadow-2xl w-full max-w-md pointer-events-auto transform transition-all duration-300 ${
             isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-4'
           }`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header con animación */}
-          <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-t-2xl p-6 relative overflow-hidden">
+          <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-t-xl p-4 relative overflow-hidden">
             {/* Animación de fondo */}
             {isPulsing && (
               <div className="absolute inset-0 bg-white/10 animate-pulse" />
             )}
             
             <div className="relative flex items-center justify-between">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2.5">
                 {/* Icono con animación de pulso */}
                 <div className="relative">
-                  <div className={`w-14 h-14 bg-white rounded-full flex items-center justify-center ${
+                  <div className={`w-10 h-10 bg-white rounded-full flex items-center justify-center ${
                     isPulsing ? 'animate-bounce' : ''
                   }`}>
-                    <ShoppingBag className="h-7 w-7 text-emerald-600" />
+                    <ShoppingBag className="h-5 w-5 text-emerald-600" />
                   </div>
                   {isPulsing && (
                     <>
@@ -151,22 +151,22 @@ export function NewOrderNotification({ orders, onClose }: NewOrderNotificationPr
                 </div>
 
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-2xl font-bold text-white">
+                  <div className="flex items-center gap-1.5">
+                    <h2 className="text-lg font-bold text-white">
                       {hasMultiple ? '¡Nuevas Órdenes!' : '¡Nueva Orden!'}
                     </h2>
-                    <Bell className={`h-5 w-5 text-white ${isPulsing ? 'animate-swing' : ''}`} />
+                    <Bell className={`h-4 w-4 text-white ${isPulsing ? 'animate-swing' : ''}`} />
                     {currentOrder.isCyberOrder && (
-                      <span className="bg-purple-500 text-white text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <Zap className="h-3 w-3" />
+                      <span className="bg-purple-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                        <Zap className="h-2.5 w-2.5" />
                         CYBER
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <p className="text-emerald-100 text-sm">Orden #{currentOrder.sequence}</p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <p className="text-emerald-100 text-xs">Orden #{currentOrder.sequence}</p>
                     {hasMultiple && (
-                      <span className="bg-white/20 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                      <span className="bg-white/20 text-white text-[10px] font-semibold px-1.5 py-0.5 rounded-full">
                         {currentIndex + 1} de {totalOrders}
                       </span>
                     )}
@@ -176,91 +176,91 @@ export function NewOrderNotification({ orders, onClose }: NewOrderNotificationPr
 
               <button
                 onClick={handleClose}
-                className="text-white hover:bg-white/20 rounded-full p-2 transition-colors"
+                className="text-white hover:bg-white/20 rounded-full p-1.5 transition-colors"
                 aria-label="Cerrar notificación"
               >
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5" />
               </button>
             </div>
           </div>
 
           {/* Content */}
-          <div className="p-6 space-y-4">
+          <div className="p-4 space-y-3">
             {/* Monto destacado */}
-            <div className="bg-white rounded-xl p-6 shadow-md border-2 border-emerald-200 text-center">
-              <p className="text-sm text-gray-500 mb-1">Valor Total</p>
-              <p className="text-4xl font-bold text-emerald-600">
+            <div className="bg-white rounded-lg p-4 shadow-md border-2 border-emerald-200 text-center">
+              <p className="text-[10px] text-gray-500 mb-0.5">Valor Total</p>
+              <p className="text-3xl font-bold text-emerald-600">
                 S/ {(currentOrder.totalValue / 100).toFixed(2)}
               </p>
               {currentOrder.isCyberOrder && currentOrder.discountValue && currentOrder.discountValue > 0 && (
-                <div className="mt-2 pt-2 border-t border-gray-200">
-                  <p className="text-xs text-purple-600 font-semibold flex items-center justify-center gap-1">
-                    <Zap className="h-3 w-3" />
+                <div className="mt-1.5 pt-1.5 border-t border-gray-200">
+                  <p className="text-[10px] text-purple-600 font-semibold flex items-center justify-center gap-1">
+                    <Zap className="h-2.5 w-2.5" />
                     Descuento Cyber: S/ {(currentOrder.discountValue / 100).toFixed(2)}
                   </p>
                   {currentOrder.promotionName && (
-                    <p className="text-[10px] text-gray-400 mt-1">{currentOrder.promotionName}</p>
+                    <p className="text-[9px] text-gray-400 mt-0.5">{currentOrder.promotionName}</p>
                   )}
                 </div>
               )}
             </div>
 
             {/* Grid de información */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {/* Cliente */}
-              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                <div className="flex items-center gap-2 mb-2">
-                  <User className="h-4 w-4 text-blue-600" />
-                  <span className="text-xs font-semibold text-gray-500 uppercase">Cliente</span>
+              <div className="bg-white rounded-lg p-2.5 shadow-sm border border-gray-100">
+                <div className="flex items-center gap-1 mb-1">
+                  <User className="h-3 w-3 text-blue-600" />
+                  <span className="text-[9px] font-semibold text-gray-500 uppercase">Cliente</span>
                 </div>
-                <p className="text-sm font-medium text-gray-900 truncate" title={currentOrder.clientName}>
+                <p className="text-[10px] font-medium text-gray-900 truncate" title={currentOrder.clientName}>
                   {currentOrder.clientName}
                 </p>
               </div>
 
               {/* Método de pago */}
-              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                <div className="flex items-center gap-2 mb-2">
-                  <CreditCard className="h-4 w-4 text-purple-600" />
-                  <span className="text-xs font-semibold text-gray-500 uppercase">Pago</span>
+              <div className="bg-white rounded-lg p-2.5 shadow-sm border border-gray-100">
+                <div className="flex items-center gap-1 mb-1">
+                  <CreditCard className="h-3 w-3 text-purple-600" />
+                  <span className="text-[9px] font-semibold text-gray-500 uppercase">Pago</span>
                 </div>
-                <p className="text-sm font-medium text-gray-900 truncate" title={currentOrder.paymentNames}>
+                <p className="text-[10px] font-medium text-gray-900 truncate" title={currentOrder.paymentNames}>
                   {currentOrder.paymentNames}
                 </p>
               </div>
 
               {/* Items */}
-              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                <div className="flex items-center gap-2 mb-2">
-                  <Package className="h-4 w-4 text-orange-600" />
-                  <span className="text-xs font-semibold text-gray-500 uppercase">Items</span>
+              <div className="bg-white rounded-lg p-2.5 shadow-sm border border-gray-100">
+                <div className="flex items-center gap-1 mb-1">
+                  <Package className="h-3 w-3 text-orange-600" />
+                  <span className="text-[9px] font-semibold text-gray-500 uppercase">Items</span>
                 </div>
-                <p className="text-sm font-medium text-gray-900">{currentOrder.totalItems} productos</p>
+                <p className="text-[10px] font-medium text-gray-900">{currentOrder.totalItems} productos</p>
               </div>
 
               {/* Origen */}
-              <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                <div className="flex items-center gap-2 mb-2">
-                  <MapPin className="h-4 w-4 text-red-600" />
-                  <span className="text-xs font-semibold text-gray-500 uppercase">Origen</span>
+              <div className="bg-white rounded-lg p-2.5 shadow-sm border border-gray-100">
+                <div className="flex items-center gap-1 mb-1">
+                  <MapPin className="h-3 w-3 text-red-600" />
+                  <span className="text-[9px] font-semibold text-gray-500 uppercase">Origen</span>
                 </div>
-                <p className="text-sm font-medium text-gray-900">{currentOrder.origin}</p>
+                <p className="text-[10px] font-medium text-gray-900">{currentOrder.origin}</p>
               </div>
             </div>
 
             {/* Estado y fecha */}
-            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+            <div className="bg-white rounded-lg p-2.5 shadow-sm border border-gray-100">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-600" />
-                  <span className="text-xs text-gray-500">
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle className="h-3 w-3 text-emerald-600" />
+                  <span className="text-[9px] text-gray-500">
                     {new Date(currentOrder.creationDate).toLocaleString('es-PE', {
                       dateStyle: 'medium',
                       timeStyle: 'short'
                     })}
                   </span>
                 </div>
-                <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full">
+                <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-semibold rounded-full">
                   {currentOrder.statusDescription}
                 </span>
               </div>
@@ -275,9 +275,9 @@ export function NewOrderNotification({ orders, onClose }: NewOrderNotificationPr
                     handleManualNavigation();
                   }}
                   disabled={currentIndex === 0}
-                  className="flex-1 flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 text-gray-700 font-semibold py-2 rounded-lg transition-colors"
+                  className="flex-1 flex items-center justify-center gap-1 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 text-gray-700 font-semibold py-1.5 rounded-lg transition-colors text-[10px]"
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-3 w-3" />
                   Anterior
                 </button>
                 <button
@@ -286,10 +286,10 @@ export function NewOrderNotification({ orders, onClose }: NewOrderNotificationPr
                     handleManualNavigation();
                   }}
                   disabled={currentIndex === totalOrders - 1}
-                  className="flex-1 flex items-center justify-center gap-2 bg-emerald-100 hover:bg-emerald-200 disabled:bg-gray-50 disabled:text-gray-300 text-emerald-700 font-semibold py-2 rounded-lg transition-colors"
+                  className="flex-1 flex items-center justify-center gap-1 bg-emerald-100 hover:bg-emerald-200 disabled:bg-gray-50 disabled:text-gray-300 text-emerald-700 font-semibold py-1.5 rounded-lg transition-colors text-[10px]"
                 >
                   Siguiente
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-3 w-3" />
                 </button>
               </div>
             )}
@@ -297,14 +297,14 @@ export function NewOrderNotification({ orders, onClose }: NewOrderNotificationPr
             {/* Botón de cerrar */}
             <button
               onClick={handleClose}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition-colors shadow-lg hover:shadow-xl"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg transition-colors shadow-lg hover:shadow-xl text-xs"
             >
               {hasMultiple ? 'Cerrar Todas' : 'Entendido'}
             </button>
 
             {/* Indicador de auto-cierre */}
             <div className="text-center">
-              <p className="text-xs text-gray-400">
+              <p className="text-[9px] text-gray-400">
                 {hasMultiple 
                   ? autoAdvance 
                     ? `Siguiente orden en 10 segundos (${currentIndex + 1}/${totalOrders})`
@@ -313,7 +313,7 @@ export function NewOrderNotification({ orders, onClose }: NewOrderNotificationPr
                 }
               </p>
               {autoAdvance && (
-                <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div className="mt-1.5 h-0.5 bg-gray-200 rounded-full overflow-hidden">
                   <div 
                     key={currentIndex}
                     className="h-full bg-emerald-500 transition-all duration-[10000ms] ease-linear"
