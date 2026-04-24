@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useDashboard } from './shared/hooks/useDashboard';
 import { useUIStore } from './shared/store/store';
+import { useAuth, LoginForm } from './features/auth';
 import { KPICards } from './features/analytics/components/KPICards';
 import { FilterBar } from './shared/components/FilterBar';
 import { Sidebar } from './shared/components/Sidebar';
@@ -34,6 +35,28 @@ import {
 } from 'lucide-react';
 
 export default function App() {
+  const { isAuthenticated, isLoading: authLoading, login, logout, currentUser } = useAuth();
+
+  // Mostrar pantalla de login si no está autenticado
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 border-4 border-violet-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-gray-500">Verificando sesión...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <LoginForm onLogin={login} />;
+  }
+
+  return <DashboardContent logout={logout} currentUser={currentUser} />;
+}
+
+function DashboardContent({ logout, currentUser }: { logout: () => void; currentUser: string | null }) {
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const {
@@ -97,6 +120,8 @@ export default function App() {
         lastUpdated={lastUpdated}
         onRefresh={handleRefresh}
         refreshing={refreshing}
+        onLogout={logout}
+        currentUser={currentUser}
       />
 
       {/* Main Content */}

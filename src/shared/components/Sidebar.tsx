@@ -1,4 +1,4 @@
-import { BarChart3, List, Package, Truck, Menu, RefreshCw, Clock, Wifi, WifiOff } from 'lucide-react';
+import { BarChart3, List, Package, Truck, Menu, RefreshCw, Clock, Wifi, WifiOff, LogOut } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Separator } from '../../components/ui/separator';
 import { memo, useMemo } from 'react';
@@ -13,6 +13,8 @@ interface SidebarProps {
   lastUpdated: Date | null;
   onRefresh: () => void;
   refreshing: boolean;
+  onLogout?: () => void;
+  currentUser?: string | null;
 }
 
 export const Sidebar = memo(({ 
@@ -24,7 +26,9 @@ export const Sidebar = memo(({
   connected,
   lastUpdated,
   onRefresh,
-  refreshing
+  refreshing,
+  onLogout,
+  currentUser
 }: SidebarProps) => {
   const tabs = useMemo(() => [
     {
@@ -134,6 +138,20 @@ export const Sidebar = memo(({
         <>
           <Separator />
           <div className="p-2 space-y-1.5">
+            {/* User Info */}
+            {currentUser && (
+              <div className="flex items-center gap-1.5 px-2 py-1.5 bg-violet-50 rounded-lg">
+                <div className="h-5 w-5 rounded-full bg-violet-200 flex items-center justify-center flex-shrink-0">
+                  <span className="text-[9px] font-bold text-violet-700">
+                    {currentUser.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <span className="text-[10px] font-medium text-violet-700 truncate flex-1">
+                  {currentUser}
+                </span>
+              </div>
+            )}
+
             {/* Connection Status */}
             <div className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-[10px] ${
               connected ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'
@@ -170,6 +188,19 @@ export const Sidebar = memo(({
               <RefreshCw className={`h-3 w-3 ${refreshing ? 'animate-spin' : ''}`} />
               Actualizar
             </Button>
+
+            {/* Logout Button */}
+            {onLogout && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onLogout}
+                className="w-full text-[10px] gap-1.5 h-7 text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <LogOut className="h-3 w-3" />
+                Cerrar Sesión
+              </Button>
+            )}
           </div>
         </>
       )}
@@ -177,6 +208,15 @@ export const Sidebar = memo(({
       {/* Collapsed Footer */}
       {isCollapsed && (
         <div className="p-2 border-t border-gray-200 flex flex-col items-center gap-1.5">
+          {/* User Avatar */}
+          {currentUser && (
+            <div className="h-6 w-6 rounded-full bg-violet-200 flex items-center justify-center" title={currentUser}>
+              <span className="text-[10px] font-bold text-violet-700">
+                {currentUser.charAt(0).toUpperCase()}
+              </span>
+            </div>
+          )}
+          
           <button
             onClick={onRefresh}
             disabled={refreshing}
@@ -185,7 +225,19 @@ export const Sidebar = memo(({
           >
             <RefreshCw className={`h-3.5 w-3.5 text-gray-600 ${refreshing ? 'animate-spin' : ''}`} />
           </button>
+          
           <div className={`w-1.5 h-1.5 rounded-full ${connected ? 'bg-emerald-500' : 'bg-red-500'}`} title={connected ? 'En línea' : 'Desconectado'} />
+          
+          {/* Logout Button */}
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
+              title="Cerrar Sesión"
+            >
+              <LogOut className="h-3.5 w-3.5 text-red-600" />
+            </button>
+          )}
         </div>
       )}
     </aside>
