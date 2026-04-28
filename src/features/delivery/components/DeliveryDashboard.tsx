@@ -1,6 +1,6 @@
 import { useMemo, memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card';
-import { Truck } from 'lucide-react';
+import { Truck, Info } from 'lucide-react';
 import { DistrictMap } from './DistrictMap';
 import {
   BarChart,
@@ -246,7 +246,9 @@ export const DeliveryDashboard = memo(({ orders, orderDetailsMap, loading }: Del
       cost: d.totalCost / 100,
       orders: d.orderCount,
       avgCost: d.avgCostPerOrder / 100,
-    })).slice(0, 10);
+    }))
+    .sort((a, b) => b.cost - a.cost) // Ordenar de mayor a menor por costo
+    .slice(0, 10);
   }, [deliveryStats]);
 
   // Datos para gráfico de canales
@@ -292,7 +294,7 @@ export const DeliveryDashboard = memo(({ orders, orderDetailsMap, loading }: Del
         costPerOrder: d.avgCostPerOrder / 100,
         orderCount: d.orderCount,
       }))
-      .sort((a, b) => a.costPerOrder - b.costPerOrder)
+      .sort((a, b) => b.costPerOrder - a.costPerOrder) // Ordenar de mayor a menor
       .slice(0, 10);
   }, [deliveryStats]);
 
@@ -367,12 +369,25 @@ export const DeliveryDashboard = memo(({ orders, orderDetailsMap, loading }: Del
         {/* Distribución por Canal */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-gray-700">
-              Distribución por Canal
-            </CardTitle>
-            <CardDescription className="text-xs text-gray-400">
-              Domicilio vs Retiro en tienda
-            </CardDescription>
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <CardTitle className="text-sm font-semibold text-gray-700">
+                  Distribución por Canal
+                </CardTitle>
+                <CardDescription className="text-xs text-gray-400">
+                  Domicilio vs Retiro en tienda
+                </CardDescription>
+              </div>
+              <div className="group relative">
+                <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 cursor-help" />
+                <div className="absolute right-0 top-6 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                  <p className="font-semibold mb-1">¿Qué muestra este gráfico?</p>
+                  <p className="mb-2">Clasifica las órdenes completas según su canal de entrega predominante.</p>
+                  <p className="text-gray-300">• Domicilio: Órdenes con mayoría de productos para entrega a casa</p>
+                  <p className="text-gray-300">• Retiro en tienda: Órdenes con mayoría de productos para recoger</p>
+                </div>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -432,12 +447,27 @@ export const DeliveryDashboard = memo(({ orders, orderDetailsMap, loading }: Del
         {/* Distribución por SLA */}
         <Card className="border border-gray-100 shadow-sm">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-gray-700">
-              Distribución por Tipo de Envío (SLA)
-            </CardTitle>
-            <CardDescription className="text-xs text-gray-400">
-              Tipos de servicio más utilizados
-            </CardDescription>
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <CardTitle className="text-sm font-semibold text-gray-700">
+                  Distribución por Tipo de Envío (SLA)
+                </CardTitle>
+                <CardDescription className="text-xs text-gray-400">
+                  Tipos de servicio más utilizados
+                </CardDescription>
+              </div>
+              <div className="group relative">
+                <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 cursor-help" />
+                <div className="absolute right-0 top-6 w-72 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                  <p className="font-semibold mb-1">¿Qué es SLA?</p>
+                  <p className="mb-2">SLA (Service Level Agreement) es el tipo de servicio de entrega.</p>
+                  <p className="text-gray-300 mb-1">Este gráfico cuenta productos individuales, no órdenes:</p>
+                  <p className="text-gray-300">• Envío regular: Entrega estándar (3-5 días)</p>
+                  <p className="text-gray-300">• Envío express: Entrega rápida (1-2 días)</p>
+                  <p className="text-gray-300">• Retiro en tienda: Cliente recoge en ubicación física</p>
+                </div>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -459,7 +489,7 @@ export const DeliveryDashboard = memo(({ orders, orderDetailsMap, loading }: Del
                 </Pie>
                 <Tooltip 
                   contentStyle={{ fontSize: 11, maxWidth: 250 }}
-                  formatter={(value: any, name: any) => [`${value} órdenes`, name]}
+                  formatter={(value: any, name: any) => [`${value} productos`, name]}
                   wrapperStyle={{ zIndex: 1000 }}
                 />
                 <Legend 

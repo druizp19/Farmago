@@ -29,6 +29,7 @@ import { useDeliveryKPIs } from './features/delivery/hooks/useDeliveryKPIs';
 import { OrdersTable } from './features/orders/components/OrdersTable';
 import { OrderDetailModal } from './features/orders/components/OrderDetailModal';
 import { NewOrderNotification } from './features/orders/components/NewOrderNotification';
+import { ProductsRankingTable } from './features/products/components/ProductsRankingTable';
 import {
   ShoppingBag,
   WifiOff,
@@ -217,19 +218,19 @@ function DashboardContent({ logout, currentUser }: { logout: () => void; current
 
                     {/* Summary chips */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                      <div className="bg-white border border-gray-100 rounded-lg p-2 shadow-sm">
-                        <p className="text-[9px] text-gray-400 uppercase tracking-wide mb-1">Canal Principal de Pago</p>
-                        <p className="text-xs font-bold text-gray-800 truncate">{kpis.topPaymentMethod}</p>
+                      <div className="bg-white border border-gray-100 rounded-lg p-2.5 shadow-sm">
+                        <p className="text-[10px] text-gray-400 uppercase tracking-wide mb-1">Canal Principal de Pago</p>
+                        <p className="text-sm font-bold text-gray-800 truncate">{kpis.topPaymentMethod}</p>
                       </div>
-                      <div className="bg-white border border-gray-100 rounded-lg p-2 shadow-sm">
-                        <p className="text-[9px] text-gray-400 uppercase tracking-wide mb-1">Órdenes con Error</p>
-                        <p className="text-xs font-bold text-red-600">
+                      <div className="bg-white border border-gray-100 rounded-lg p-2.5 shadow-sm">
+                        <p className="text-[10px] text-gray-400 uppercase tracking-wide mb-1">Órdenes con Error</p>
+                        <p className="text-sm font-bold text-red-600">
                           {filteredOrders.filter((o: any) => o.workflowInErrorState).length}
                         </p>
                       </div>
-                      <div className="bg-white border border-gray-100 rounded-lg p-2 shadow-sm">
-                        <p className="text-[9px] text-gray-400 uppercase tracking-wide mb-1">Entrega Completada</p>
-                        <p className="text-xs font-bold text-emerald-600">
+                      <div className="bg-white border border-gray-100 rounded-lg p-2.5 shadow-sm">
+                        <p className="text-[10px] text-gray-400 uppercase tracking-wide mb-1">Entrega Completada</p>
+                        <p className="text-sm font-bold text-emerald-600">
                           {filteredOrders.filter((o: any) => o.isAllDelivered).length}
                         </p>
                       </div>
@@ -301,54 +302,7 @@ function DashboardContent({ logout, currentUser }: { logout: () => void; current
 
                   {/* Product list table */}
                   {topProducts.length > 0 && (
-                    <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-                      <div className="px-3 py-2 border-b border-gray-100">
-                        <h3 className="text-[10px] font-semibold text-gray-800">Ranking de Productos</h3>
-                        <p className="text-[9px] text-gray-400 mt-0.5">Top 20 productos por unidades — últimas 100 órdenes</p>
-                      </div>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-[10px]">
-                          <thead className="bg-gray-50">
-                            <tr>
-                              <th className="text-left px-3 py-2 text-gray-500 font-semibold w-6">#</th>
-                              <th className="text-left px-3 py-2 text-gray-500 font-semibold">Producto</th>
-                              <th className="text-left px-3 py-2 text-gray-500 font-semibold">Categoría</th>
-                              <th className="text-right px-3 py-2 text-gray-500 font-semibold">SKU</th>
-                              <th className="text-right px-3 py-2 text-gray-500 font-semibold">Unidades</th>
-                              <th className="text-right px-3 py-2 text-gray-500 font-semibold">Órdenes</th>
-                              <th className="text-right px-3 py-2 text-gray-500 font-semibold">Ingresos</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {topProducts.map((p, i) => (
-                              <tr key={p.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
-                                <td className="px-3 py-2 text-gray-400 font-medium">{i + 1}</td>
-                                <td className="px-3 py-2">
-                                  <div className="flex items-center gap-1.5">
-                                    {p.imageUrl && (
-                                      <img src={p.imageUrl} alt={p.name}
-                                        className="w-7 h-7 object-contain rounded bg-white border border-gray-100 flex-shrink-0" />
-                                    )}
-                                    <span className="text-gray-700 font-medium line-clamp-1">{p.name}</span>
-                                  </div>
-                                </td>
-                                <td className="px-3 py-2">
-                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-medium bg-violet-50 text-violet-700 border border-violet-100">
-                                    {p.category}
-                                  </span>
-                                </td>
-                                <td className="px-3 py-2 text-right text-gray-400 font-mono">{p.refId}</td>
-                                <td className="px-3 py-2 text-right font-bold text-blue-600">{p.totalQuantity.toLocaleString()}</td>
-                                <td className="px-3 py-2 text-right text-gray-600">{p.orderCount}</td>
-                                <td className="px-3 py-2 text-right font-semibold text-emerald-600">
-                                  S/ {(p.totalRevenue / 100).toLocaleString('es-PE', { minimumFractionDigits: 2 })}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
+                    <ProductsRankingTable products={topProducts} />
                   )}
                     </div>
                   )}
@@ -382,10 +336,10 @@ function DashboardContent({ logout, currentUser }: { logout: () => void; current
 
                   {/* ── ORDERS TAB ── */}
                   {activeTab === 'orders' && (
-                    <div className="bg-white border border-gray-100 rounded-lg p-2 shadow-sm">
-                      <div className="mb-2">
-                        <h2 className="text-[10px] font-semibold text-gray-800">Lista de Órdenes</h2>
-                        <p className="text-[9px] text-gray-400 mt-0.5">
+                    <div className="bg-white border border-gray-100 rounded-lg p-2.5 shadow-sm">
+                      <div className="mb-2.5">
+                        <h2 className="text-xs font-semibold text-gray-800">Lista de Órdenes</h2>
+                        <p className="text-[10px] text-gray-400 mt-0.5">
                           Haz clic en una orden para ver el detalle completo · Los filtros de arriba aplican aquí también
                         </p>
                       </div>

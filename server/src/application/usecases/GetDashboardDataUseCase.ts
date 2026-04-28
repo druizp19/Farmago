@@ -8,6 +8,7 @@ import { ProductAggregationService } from '../../domain/services/ProductAggregat
 import { CategoryAggregationService } from '../../domain/services/CategoryAggregationService';
 import { DeliveryAggregationService } from '../../domain/services/DeliveryAggregationService';
 import { PromotionDetectionService } from '../../domain/services/PromotionDetectionService';
+import { PaymentMappingService } from '../../domain/services/PaymentMappingService';
 import { SYNC_CONFIG, CACHE_CONFIG } from '../../config/constants';
 import { logger } from '../../shared/logger';
 import type { OrderListItem, OrderDetail } from '../../domain/types/Order';
@@ -198,7 +199,7 @@ export class GetDashboardDataUseCase {
   }
 
   /**
-   * Enrich orders with promotion/cyber data
+   * Enrich orders with promotion/cyber data and normalize payment names
    */
   private enrichOrdersWithPromotions(
     orders: OrderListItem[],
@@ -207,14 +208,21 @@ export class GetDashboardDataUseCase {
     return orders.map(order => {
       const detail = orderDetailsMap[order.orderId];
       
+      // Normalize payment name
+      const normalizedPaymentName = PaymentMappingService.normalizePaymentName(order.paymentNames);
+      
       if (!detail) {
-        return order;
+        return {
+          ...order,
+          paymentNames: normalizedPaymentName,
+        };
       }
 
       const promotionInfo = PromotionDetectionService.detectPromotion(detail);
 
       return {
         ...order,
+        paymentNames: normalizedPaymentName,
         isCyberOrder: promotionInfo.isCyberOrder,
         promotionName: promotionInfo.promotionName,
         discountValue: promotionInfo.discountValue,

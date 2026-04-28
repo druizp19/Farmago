@@ -74,20 +74,20 @@ export const OrdersTable = memo(({ orders, onSelectOrder }: OrdersTableProps) =>
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2.5">
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-1.5">
+      <div className="flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-gray-400" />
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
           <Input
             placeholder="Buscar por ID, cliente o secuencia..."
             value={search}
             onChange={e => handleSearchChange(e.target.value)}
-            className="pl-7 h-8 text-xs border-gray-200"
+            className="pl-8 h-9 text-xs border-gray-200"
           />
         </div>
         <Select value={statusFilter} onValueChange={handleStatusChange}>
-          <SelectTrigger className="w-full sm:w-44 h-8 text-xs border-gray-200">
+          <SelectTrigger className="w-full sm:w-48 h-9 text-xs border-gray-200">
             <SelectValue placeholder="Estado" />
           </SelectTrigger>
           <SelectContent>
@@ -101,7 +101,7 @@ export const OrdersTable = memo(({ orders, onSelectOrder }: OrdersTableProps) =>
         </Select>
       </div>
 
-      <p className="text-[10px] text-gray-400">
+      <p className="text-[11px] text-gray-400">
         Mostrando {filtered.length} órdenes
         {statusFilter !== 'all' && ` · Estado: ${STATUS_LABELS[statusFilter]?.label || statusFilter}`}
       </p>
@@ -109,7 +109,7 @@ export const OrdersTable = memo(({ orders, onSelectOrder }: OrdersTableProps) =>
       {/* Virtualized Table */}
       <div className="rounded-lg border border-gray-100 overflow-hidden bg-white">
         {/* Header */}
-        <div className="grid grid-cols-[180px_1fr_100px_160px_90px_70px_120px_120px] gap-3 px-3 py-2 bg-gray-50 border-b border-gray-100 text-[10px] font-semibold text-gray-500">
+        <div className="grid grid-cols-[180px_1fr_100px_160px_90px_70px_120px_120px] gap-3 px-3 py-2.5 bg-gray-50 border-b border-gray-100 text-[11px] font-semibold text-gray-600">
           <div>ID Orden</div>
           <div>Cliente</div>
           <div className="text-right">Total</div>
@@ -123,11 +123,11 @@ export const OrdersTable = memo(({ orders, onSelectOrder }: OrdersTableProps) =>
         {/* Virtualized Body */}
         <div
           ref={parentRef}
-          className="h-[500px] overflow-auto"
+          className="h-[550px] overflow-auto"
           style={{ contain: 'strict' }}
         >
           {filtered.length === 0 ? (
-            <div className="flex items-center justify-center h-full text-gray-400 text-xs">
+            <div className="flex items-center justify-center h-full text-gray-400 text-sm">
               No se encontraron órdenes
             </div>
           ) : (
@@ -150,44 +150,44 @@ export const OrdersTable = memo(({ orders, onSelectOrder }: OrdersTableProps) =>
                     key={virtualRow.key}
                     data-index={virtualRow.index}
                     ref={rowVirtualizer.measureElement}
-                    className="grid grid-cols-[180px_1fr_100px_160px_90px_70px_120px_120px] gap-3 px-3 py-2 border-b border-gray-50 hover:bg-blue-50/40 cursor-pointer transition-colors absolute top-0 left-0 w-full"
+                    className="grid grid-cols-[180px_1fr_100px_160px_90px_70px_120px_120px] gap-3 px-3 py-2.5 border-b border-gray-50 hover:bg-blue-50/40 cursor-pointer transition-colors absolute top-0 left-0 w-full"
                     style={{
                       transform: `translateY(${virtualRow.start}px)`,
                     }}
                     onClick={() => onSelectOrder?.(order.orderId)}
                   >
-                    <div className="flex flex-col gap-0.5">
+                    <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-1">
-                        <span className="font-mono text-[10px] text-blue-600 font-bold">
+                        <span className="font-mono text-[11px] text-blue-600 font-bold">
                           #{order.sequence || order.orderId.slice(-6)}
                         </span>
                         {order.isCyberOrder && (
-                          <span className="inline-flex items-center gap-0.5 px-1 py-0.5 bg-purple-100 text-purple-700 rounded text-[8px] font-bold border border-purple-200">
+                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-purple-100 text-purple-700 rounded text-[9px] font-bold border border-purple-200">
                             <span>⚡</span>
                             CYBER
                           </span>
                         )}
                       </div>
-                      <span className="font-mono text-[8px] text-gray-400 select-all truncate">
+                      <span className="font-mono text-[9px] text-gray-400 select-all truncate">
                         {order.orderId}
                       </span>
                     </div>
-                    <div className="text-xs text-gray-700 truncate">
+                    <div className="text-sm text-gray-700 truncate">
                       {order.clientName || '—'}
                     </div>
-                    <div className="text-right font-semibold text-xs text-gray-800">
+                    <div className="text-right font-semibold text-sm text-gray-800">
                       S/ {((order.totalValue || 0) / 100).toLocaleString('es-PE', { minimumFractionDigits: 2 })}
                     </div>
                     <div>
-                      <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium border ${statusInfo.color}`}>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-[11px] font-medium border ${statusInfo.color}`}>
                         {statusInfo.label}
                       </span>
                     </div>
-                    <div className="text-[10px] text-gray-500">{order.origin || '—'}</div>
-                    <div className="text-[10px] text-gray-500 hidden md:block text-center">
+                    <div className="text-[11px] text-gray-500">{order.origin || '—'}</div>
+                    <div className="text-[11px] text-gray-500 hidden md:block text-center">
                       {order.totalItems ?? '—'}
                     </div>
-                    <div className="text-[10px] text-gray-400 hidden lg:block">
+                    <div className="text-[11px] text-gray-400 hidden lg:block">
                       {order.creationDate
                         ? new Date(order.creationDate).toLocaleString('es-PE', {
                             day: '2-digit', month: '2-digit', year: '2-digit',
@@ -195,7 +195,7 @@ export const OrdersTable = memo(({ orders, onSelectOrder }: OrdersTableProps) =>
                           })
                         : '—'}
                     </div>
-                    <div className="text-[10px] text-gray-400 hidden lg:block">
+                    <div className="text-[11px] text-gray-400 hidden lg:block">
                       {order.ShippingEstimatedDate
                         ? new Date(order.ShippingEstimatedDate).toLocaleString('es-PE', {
                             day: '2-digit', month: '2-digit', year: '2-digit',

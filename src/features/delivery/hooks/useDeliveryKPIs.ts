@@ -89,7 +89,7 @@ export const useDeliveryKPIs = (orders: OrderListItem[], orderDetailsMap: Record
     const totalRevenue = deliveryStats.reduce((sum, d) => sum + d.totalRevenue, 0);
     
     const avgDeliveryCostPerOrder = totalOrders > 0 ? totalDeliveryCost / totalOrders : 0;
-    const deliveryCostPercentage = totalRevenue > 0 ? (totalDeliveryCost / totalRevenue) * 100 : 0;
+    const deliveryCostVsRevenue = totalRevenue > 0 ? (totalDeliveryCost / totalRevenue) : 0;
     
     // Contar órdenes por canal
     const orderChannelMap = new Map<string, string>();
@@ -132,14 +132,25 @@ export const useDeliveryKPIs = (orders: OrderListItem[], orderDetailsMap: Record
       ? deliveryStats.sort((a, b) => b.orderCount - a.orderCount)[0].company 
       : 'N/A';
     
+    // Gasto fijo mensual y diario
+    const FIXED_MONTHLY_COST = 4500;
+    const FIXED_DAILY_COST = 150;
+    
+    // Calcular diferencia entre gasto fijo y costo de delivery
+    const fixedCostDifference = FIXED_MONTHLY_COST - (totalDeliveryCost / 100);
+    
     return {
       totalDeliveryCost: totalDeliveryCost / 100,
       avgDeliveryCostPerOrder: avgDeliveryCostPerOrder / 100,
-      deliveryCostPercentage,
+      deliveryCostVsRevenue,
+      totalRevenue: totalRevenue / 100,
       totalOrders,
       deliveryOrders,
       pickupOrders,
       topCompany,
+      fixedMonthlyCost: FIXED_MONTHLY_COST,
+      fixedDailyCost: FIXED_DAILY_COST,
+      fixedCostDifference,
     };
   }, [orders, orderDetailsMap]);
 };
