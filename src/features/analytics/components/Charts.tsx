@@ -20,7 +20,7 @@ import {
   PolarRadiusAxis,
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card';
-import { Info } from 'lucide-react';
+import { Info, ChevronLeft } from 'lucide-react';
 import type { DashboardKPIs, ProductAggregation, CategoryStat } from '../../../types/orders';
 import { CHART_CONFIG } from '../../../shared/config/constants';
 import { formatCurrency, truncateText } from '../../../shared/utils/formatters';
@@ -110,20 +110,56 @@ RevenueByDayChart.displayName = 'RevenueByDayChart';
 
 // ── Payment Methods ─────────────────────────────────────────────────────────
 export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
-  const data = kpis.paymentDistribution.slice(0, 6);
-  const total = data.reduce((sum, item) => sum + item.count, 0);
+  const [expandedPayment, setExpandedPayment] = useState<string | null>(null);
+  
+  // Filtrar para obtener solo los métodos principales (sin parentPayment)
+  const mainPayments = kpis.paymentDistribution.filter(p => !p.parentPayment).slice(0, 6);
+  
+  // Si hay un método expandido, mostrar solo sus sub-tipos
+  const displayData = expandedPayment 
+    ? kpis.paymentDistribution.filter(p => p.parentPayment === expandedPayment)
+    : mainPayments;
+
+  const handleClick = (entry: any) => {
+    const paymentName = entry.name;
+    
+    // Si es Open Pay y no estamos expandidos, expandir
+    if (paymentName === 'Open Pay' && !expandedPayment) {
+      setExpandedPayment('Open Pay');
+    } else if (expandedPayment) {
+      // Si estamos en vista expandida, colapsar al hacer clic en cualquier parte
+      setExpandedPayment(null);
+    }
+  };
 
   return (
     <Card className="border border-gray-100 shadow-sm">
       <CardHeader className="pb-1 px-3 pt-2.5">
-        <CardTitle className="text-sm font-semibold text-gray-700">Métodos de Pago</CardTitle>
-        <CardDescription className="text-[10px] text-gray-400">Distribución por forma de pago</CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-sm font-semibold text-gray-700">
+              {expandedPayment ? `${expandedPayment} - Tipos de Tarjeta` : 'Métodos de Pago'}
+            </CardTitle>
+            <CardDescription className="text-[10px] text-gray-400">
+              {expandedPayment ? 'Click en el gráfico para volver' : 'Click en Open Pay para ver tipos de tarjeta'}
+            </CardDescription>
+          </div>
+          {expandedPayment && (
+            <button
+              onClick={() => setExpandedPayment(null)}
+              className="flex items-center gap-1 text-xs px-3 py-1 bg-violet-50 text-violet-600 rounded-md hover:bg-violet-100 transition-colors"
+            >
+              <ChevronLeft className="h-3 w-3" />
+              Volver
+            </button>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="px-3 pb-2.5 pt-2">
         <ResponsiveContainer width="100%" height={260}>
           <PieChart>
             <Pie
-              data={data}
+              data={displayData}
               cx="50%"
               cy="55%"
               innerRadius={55}
@@ -133,19 +169,23 @@ export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
               nameKey="name"
               isAnimationActive={false}
               label={false}
+              onClick={handleClick}
+              style={{ cursor: 'pointer' }}
             >
-              {data.map((_, i) => (
+              {displayData.map((_, i) => (
                 <Cell 
                   key={`cell-${i}`} 
                   fill={COLORS[i % COLORS.length]}
                   stroke="#fff"
                   strokeWidth={3}
+                  style={{ cursor: 'pointer' }}
                 />
               ))}
             </Pie>
             <Tooltip
               formatter={(v: any, name: any) => {
-                const percentage = ((Number(v) / total) * 100).toFixed(1);
+                const currentTotal = displayData.reduce((sum, item) => sum + item.count, 0);
+                const percentage = ((Number(v) / currentTotal) * 100).toFixed(1);
                 return [`${v} órdenes (${percentage}%)`, name];
               }}
               contentStyle={{ 
@@ -167,9 +207,10 @@ export const PaymentMethodChart = memo(({ kpis }: ChartsProps) => {
               iconSize={11}
               iconType="square"
               formatter={(value, entry: any) => {
-                const item = data.find(d => d.name === value);
+                const item = displayData.find(d => d.name === value);
                 if (!item) return value;
-                const percentage = ((item.count / total) * 100).toFixed(1);
+                const currentTotal = displayData.reduce((sum, item) => sum + item.count, 0);
+                const percentage = ((item.count / currentTotal) * 100).toFixed(1);
                 const displayName = value.length > 12 ? value.slice(0, 12) + '...' : value;
                 return `${displayName} ${percentage}%`;
               }}

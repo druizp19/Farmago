@@ -5,6 +5,7 @@ export interface OrderListItem {
   items: null | OrderItem[];
   totalValue: number;
   paymentNames: string;
+  cardType?: string | null; // Tipo específico de tarjeta (Visa, Mastercard, etc.)
   status: string;
   statusDescription: string;
   marketPlaceOrderId: string | null;
@@ -162,6 +163,7 @@ export interface DashboardFilters {
   timeTo: string; // Hora hasta (HH:mm)
   origin: string;
   paymentMethod: string[]; // Cambiado de string a string[]
+  cardType: string[]; // Tipos de tarjeta específicos (Visa, Mastercard, etc.)
   categoryLevel1: string[];
   categoryLevel2: string[];
   categoryLevel3: string[];
@@ -185,7 +187,7 @@ export interface DashboardKPIs {
   ordersByHour: { hour: string; count: number }[];
   ordersByDay: { date: string; count: number; revenue: number }[];
   statusDistribution: { status: string; label: string; count: number; value: number }[];
-  paymentDistribution: { name: string; count: number; value: number }[];
+  paymentDistribution: { name: string; count: number; value: number; parentPayment?: string | null }[];
   topClients: { name: string; orders: number; revenue: number }[];
   deliveryChannels: { channel: string; label: string; count: number }[];
   originDistribution: { origin: string; count: number }[];

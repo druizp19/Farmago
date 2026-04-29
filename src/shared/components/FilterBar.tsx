@@ -21,6 +21,7 @@ interface FilterBarProps {
     origins: string[];
     payments: string[];
   };
+  cardTypeOptions: string[];
   level1Options: string[];
   level2Options: string[];
   level3Options: string[];
@@ -63,6 +64,7 @@ export function FilterBar({
   setFilters,
   resetFilters,
   filterOptions,
+  cardTypeOptions,
   level1Options,
   level2Options,
   level3Options,
@@ -73,6 +75,7 @@ export function FilterBar({
     filters.status.length > 0 ||
     filters.origin !== 'all' ||
     filters.paymentMethod.length > 0 ||
+    filters.cardType.length > 0 ||
     filters.isCyberOrder !== 'all' ||
     filters.categoryLevel1.length > 0 ||
     filters.categoryLevel2.length > 0 ||
@@ -86,6 +89,7 @@ export function FilterBar({
     filters.status.length > 0,
     filters.origin !== 'all',
     filters.paymentMethod.length > 0,
+    filters.cardType.length > 0,
     filters.isCyberOrder !== 'all',
     filters.categoryLevel1.length > 0,
     filters.categoryLevel2.length > 0,
@@ -255,6 +259,24 @@ export function FilterBar({
             }
           />
 
+          {/* Card Type - MultiSelect (solo visible si Open Pay está seleccionado) */}
+          {filters.paymentMethod.includes('Open Pay') && cardTypeOptions.length > 0 && (
+            <MultiSelect
+              options={cardTypeOptions}
+              selected={filters.cardType}
+              onChange={(selected) => setFilters({ ...filters, cardType: selected })}
+              placeholder="Tipo de tarjeta"
+              className="w-40 text-[10px]"
+              renderValue={(selected) => 
+                selected.length === 0 
+                  ? "Todas las tarjetas" 
+                  : selected.length === 1 
+                  ? selected[0]
+                  : `${selected.length} tarjetas`
+              }
+            />
+          )}
+
           {/* Cyber Filter */}
           <Select
             value={filters.isCyberOrder}
@@ -392,7 +414,7 @@ export function FilterBar({
       )}
 
       {/* Selected status and payment chips */}
-      {(filters.status.length > 0 || filters.paymentMethod.length > 0) && (
+      {(filters.status.length > 0 || filters.paymentMethod.length > 0 || filters.cardType.length > 0) && (
         <div className="px-3 pb-2 pt-0">
           <div className="flex flex-wrap items-center gap-1.5">
             {filters.status.length > 0 && (
@@ -427,6 +449,26 @@ export function FilterBar({
                     <button
                       onClick={() => setFilters({ ...filters, paymentMethod: filters.paymentMethod.filter(p => p !== payment) })}
                       className="ml-0.5 hover:bg-green-200 rounded-full p-0.5"
+                    >
+                      <X className="h-2.5 w-2.5" />
+                    </button>
+                  </div>
+                ))}
+              </>
+            )}
+
+            {filters.cardType.length > 0 && (
+              <>
+                <span className="text-[10px] text-gray-400 flex-shrink-0">Tarjetas:</span>
+                {filters.cardType.map(card => (
+                  <div
+                    key={`card-${card}`}
+                    className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded text-[10px]"
+                  >
+                    <span>{card}</span>
+                    <button
+                      onClick={() => setFilters({ ...filters, cardType: filters.cardType.filter(c => c !== card) })}
+                      className="ml-0.5 hover:bg-emerald-200 rounded-full p-0.5"
                     >
                       <X className="h-2.5 w-2.5" />
                     </button>

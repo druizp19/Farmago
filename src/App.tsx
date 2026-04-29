@@ -71,6 +71,7 @@ function DashboardContent({ logout, currentUser }: { logout: () => void; current
     level1Options,
     level2Options,
     level3Options,
+    cardTypeOptions,
     connected,
     loading,
     lastUpdated,
@@ -156,6 +157,7 @@ function DashboardContent({ logout, currentUser }: { logout: () => void; current
                 setFilters={setFilters}
                 resetFilters={resetFilters}
                 filterOptions={filterOptions}
+                cardTypeOptions={cardTypeOptions}
                 level1Options={level1Options}
                 level2Options={level2Options}
                 level3Options={level3Options}

@@ -24,6 +24,16 @@ export function useOrderFilters(orders: OrderListItem[]) {
       // Payment method filter (array)
       if (filters.paymentMethod.length > 0 && !filters.paymentMethod.includes(o.paymentNames)) passesFilters = false;
       
+      // Card type filter (array) - solo aplica si el método de pago es Open Pay
+      if (filters.cardType.length > 0) {
+        if (o.paymentNames === 'Open Pay') {
+          if (!o.cardType || !filters.cardType.includes(o.cardType)) passesFilters = false;
+        } else {
+          // Si se filtra por tipo de tarjeta pero el pago no es Open Pay, excluir
+          passesFilters = false;
+        }
+      }
+      
       // Cyber filter
       if (filters.isCyberOrder === 'cyber' && !o.isCyberOrder) passesFilters = false;
       if (filters.isCyberOrder === 'regular' && o.isCyberOrder) passesFilters = false;

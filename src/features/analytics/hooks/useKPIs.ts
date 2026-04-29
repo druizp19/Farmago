@@ -36,6 +36,13 @@ export function useKPIs(orders: OrderListItem[]): DashboardKPIs {
       const pm = order.paymentNames || 'Otro';
       paymentCount[pm] = (paymentCount[pm] || 0) + 1;
       paymentRevenue[pm] = (paymentRevenue[pm] || 0) + (value / 100);
+      
+      // Si es Open Pay y tiene cardType, también contarlo
+      if (pm === 'Open Pay' && order.cardType) {
+        const cardKey = `${pm}:${order.cardType}`;
+        paymentCount[cardKey] = (paymentCount[cardKey] || 0) + 1;
+        paymentRevenue[cardKey] = (paymentRevenue[cardKey] || 0) + (value / 100);
+      }
 
       const client = order.clientName || 'Desconocido';
       if (!clientMap[client]) clientMap[client] = { orders: 0, revenue: 0 };
@@ -103,11 +110,17 @@ export function useKPIs(orders: OrderListItem[]): DashboardKPIs {
       value: statusRevenue[status] || 0,
     })).sort((a, b) => b.count - a.count);
 
-    const paymentDistribution = Object.entries(paymentCount).map(([name, count]) => ({
-      name,
-      count,
-      value: paymentRevenue[name] || 0,
-    })).sort((a, b) => b.count - a.count);
+    const paymentDistribution = Object.entries(paymentCount).map(([key, count]) => {
+      // Separar el método de pago del tipo de tarjeta si existe
+      const [name, cardType] = key.includes(':') ? key.split(':') : [key, null];
+      
+      return {
+        name: cardType || name, // Si tiene cardType, mostrar el tipo de tarjeta
+        count,
+        value: paymentRevenue[key] || 0,
+        parentPayment: cardType ? name : null, // Si es un tipo de tarjeta, indicar su padre
+      };
+    }).sort((a, b) => b.count - a.count);
 
     const topClients = Object.entries(clientMap)
       .map(([name, data]) => ({ name, ...data }))

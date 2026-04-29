@@ -36,7 +36,7 @@ export function useDashboard() {
   const { filteredProducts, filteredCategoryStats } = useFilteredProducts(filteredOrdersWithRevenue);
 
   // Filter options
-  const { filterOptions, level1Options, level2Options, level3Options } = useFilterOptions(orders);
+  const { filterOptions, cardTypeOptions, level1Options, level2Options, level3Options } = useFilterOptions(orders);
 
   // Add location data to KPIs
   const kpisWithLocation = {
@@ -69,6 +69,7 @@ export function useDashboard() {
     setFilters,
     resetFilters,
     filterOptions,
+    cardTypeOptions,
     level1Options,
     level2Options,
     level3Options,

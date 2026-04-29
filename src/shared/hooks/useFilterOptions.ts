@@ -13,9 +13,46 @@ export function useFilterOptions(orders: OrderListItem[]) {
   const filterOptions = useMemo(() => {
     const statuses = [...new Set(orders.map(o => o.status))].sort();
     const origins = [...new Set(orders.map(o => o.origin).filter(Boolean))].sort();
-    const payments = [...new Set(orders.map(o => o.paymentNames).filter(Boolean))].sort();
-    return { statuses, origins, payments };
+    
+    // Generar opciones de pago jerárquicas
+    const paymentSet = new Set<string>();
+    const cardTypesByPayment: Record<string, Set<string>> = {};
+    
+    orders.forEach(o => {
+      const paymentMethod = o.paymentNames;
+      if (paymentMethod) {
+        paymentSet.add(paymentMethod);
+        
+        // Si es Open Pay y tiene cardType, agregarlo
+        if (paymentMethod === 'Open Pay' && o.cardType) {
+          if (!cardTypesByPayment[paymentMethod]) {
+            cardTypesByPayment[paymentMethod] = new Set();
+          }
+          cardTypesByPayment[paymentMethod].add(o.cardType);
+        }
+      }
+    });
+    
+    const payments = Array.from(paymentSet).sort();
+    
+    return { statuses, origins, payments, cardTypesByPayment };
   }, [orders]);
+
+  // Opciones de tipos de tarjeta (cuando se selecciona Open Pay)
+  const cardTypeOptions = useMemo(() => {
+    if (!filters.paymentMethod.includes('Open Pay')) {
+      return [];
+    }
+    
+    const cardTypes = new Set<string>();
+    orders.forEach(o => {
+      if (o.paymentNames === 'Open Pay' && o.cardType) {
+        cardTypes.add(o.cardType);
+      }
+    });
+    
+    return Array.from(cardTypes).sort();
+  }, [orders, filters.paymentMethod]);
 
   // Level 1 options
   const level1Options = useMemo(() => {
@@ -91,6 +128,7 @@ export function useFilterOptions(orders: OrderListItem[]) {
 
   return {
     filterOptions,
+    cardTypeOptions,
     level1Options,
     level2Options,
     level3Options,

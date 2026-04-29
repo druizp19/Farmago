@@ -8,19 +8,30 @@
 export class PaymentMappingService {
   /**
    * Mapea el nombre del método de pago a un nombre normalizado
+   * Retorna tanto el método principal como el tipo específico de tarjeta
    */
-  static normalizePaymentName(paymentName: string): string {
-    if (!paymentName) return 'Otro';
+  static normalizePaymentName(paymentName: string): { 
+    normalized: string; 
+    cardType: string | null;
+  } {
+    if (!paymentName) return { normalized: 'Otro', cardType: null };
 
-    const normalized = paymentName.trim();
+    const trimmed = paymentName.trim();
 
     // Si contiene "MONNET" o "BAN", es Monnet - Bank
-    if (normalized.includes('MONNET') || normalized.includes('BAN')) {
-      return 'Monnet - Bank';
+    if (trimmed.includes('MONNET') || trimmed.includes('BAN')) {
+      return { normalized: 'Monnet - Bank', cardType: null };
     }
 
-    // Todos los demás métodos son Open Pay
+    // Todos los demás métodos son Open Pay con su tipo de tarjeta específico
     // (Visa, Mastercard, American Express, Diners, etc.)
-    return 'Open Pay';
+    return { normalized: 'Open Pay', cardType: trimmed };
+  }
+
+  /**
+   * Versión legacy para compatibilidad
+   */
+  static normalizePaymentNameLegacy(paymentName: string): string {
+    return this.normalizePaymentName(paymentName).normalized;
   }
 }

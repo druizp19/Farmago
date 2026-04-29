@@ -208,13 +208,14 @@ export class GetDashboardDataUseCase {
     return orders.map(order => {
       const detail = orderDetailsMap[order.orderId];
       
-      // Normalize payment name
-      const normalizedPaymentName = PaymentMappingService.normalizePaymentName(order.paymentNames);
+      // Normalize payment name and extract card type
+      const paymentInfo = PaymentMappingService.normalizePaymentName(order.paymentNames);
       
       if (!detail) {
         return {
           ...order,
-          paymentNames: normalizedPaymentName,
+          paymentNames: paymentInfo.normalized,
+          cardType: paymentInfo.cardType,
         };
       }
 
@@ -222,7 +223,8 @@ export class GetDashboardDataUseCase {
 
       return {
         ...order,
-        paymentNames: normalizedPaymentName,
+        paymentNames: paymentInfo.normalized,
+        cardType: paymentInfo.cardType,
         isCyberOrder: promotionInfo.isCyberOrder,
         promotionName: promotionInfo.promotionName,
         discountValue: promotionInfo.discountValue,

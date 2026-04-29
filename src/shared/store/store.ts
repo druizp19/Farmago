@@ -91,6 +91,7 @@ const DEFAULT_FILTERS: DashboardFilters = {
   timeTo: '',
   origin: 'all',
   paymentMethod: [],
+  cardType: [],
   categoryLevel1: [],
   categoryLevel2: [],
   categoryLevel3: [],

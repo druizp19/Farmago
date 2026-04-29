@@ -22,6 +22,7 @@ export interface OrderListItem {
   invoicedDate: string | null;
   clientName: string;
   paymentNames: string;
+  cardType?: string | null; // Tipo específico de tarjeta (Visa, Mastercard, etc.)
   workflowInErrorState: boolean;
   isAllDelivered: boolean;
   // Promotion fields
