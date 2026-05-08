@@ -115,7 +115,7 @@ sudo systemctl restart apache2
 cd /var/www/farmago
 
 # Iniciar con PM2
-pm2 start ecosystem.config.js
+pm2 start ecosystem.config.cjs
 
 # Configurar inicio automático
 pm2 startup systemd

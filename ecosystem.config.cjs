@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: 'farmago-backend',
-    cwd: '/var/www/farmago',
+    cwd: '/var/www/Farmago',
     script: 'server/dist/index.js',
     instances: 1,
     exec_mode: 'fork',
