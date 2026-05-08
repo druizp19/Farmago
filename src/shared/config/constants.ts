@@ -14,6 +14,7 @@ export const APP_CONFIG = {
 
 export const API_CONFIG = {
   SERVER_URL: import.meta.env.VITE_API_URL || 'http://localhost:3001',
+  API_BASE_PATH: `${import.meta.env.BASE_URL}api`,
   SOCKET_RECONNECTION_DELAY: 1000,
   SOCKET_RECONNECTION_ATTEMPTS: 5,
   REQUEST_TIMEOUT: 30000, // 30 segundos

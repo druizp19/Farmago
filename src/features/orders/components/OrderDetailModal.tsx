@@ -18,7 +18,7 @@ export const OrderDetailModal = memo(({ orderId, onClose }: OrderDetailModalProp
     if (!orderId) { setOrder(null); return; }
     setLoading(true);
     setError(null);
-    fetch(`${API_CONFIG.SERVER_URL}/api/orders/${orderId}`)
+    fetch(`${API_CONFIG.SERVER_URL}${API_CONFIG.API_BASE_PATH}/orders/${orderId}`)
       .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
       .then(data => { setOrder(data); setLoading(false); })
       .catch(err => { setError(err.message); setLoading(false); });
