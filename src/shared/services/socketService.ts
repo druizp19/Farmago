@@ -44,6 +44,7 @@ class SocketService {
     }
 
     this.socket = io(API_CONFIG.SERVER_URL, {
+      path: `${import.meta.env.BASE_URL}socket.io`,
       transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionDelay: API_CONFIG.SOCKET_RECONNECTION_DELAY,

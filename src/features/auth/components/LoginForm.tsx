@@ -38,7 +38,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
         {/* Logo */}
         <div className="flex justify-center mb-8">
           <img 
-            src="/Farma-logo3.svg" 
+            src={`${import.meta.env.BASE_URL}Farma-logo3.svg`}
             alt="Farmago" 
             className="h-16 w-auto"
           />

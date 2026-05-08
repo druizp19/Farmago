@@ -76,7 +76,7 @@ export function DistrictMap({ data }: DistrictMapProps) {
     }
 
     // Load and render GeoJSON
-    fetch('/peru_distrital_simple.geojson')
+    fetch(`${import.meta.env.BASE_URL}peru_distrital_simple.geojson`)
       .then(r => r.json())
       .then((geojson: any) => {
         const layer = L.geoJSON(geojson, {

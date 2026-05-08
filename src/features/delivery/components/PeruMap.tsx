@@ -92,7 +92,7 @@ export function PeruMap({ locationData, loading }: PeruMapProps) {
     }
 
     // Load and render GeoJSON
-    fetch('/peru_departamental_simple.geojson')
+    fetch(`${import.meta.env.BASE_URL}peru_departamental_simple.geojson`)
       .then(r => r.json())
       .then((geojson: any) => {
         // Check if map still exists

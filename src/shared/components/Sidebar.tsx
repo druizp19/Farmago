@@ -80,7 +80,7 @@ export const Sidebar = memo(({
         ) : (
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <img src="/Farma-logo3.svg" alt="FarmaGo" className="h-8 w-8" />
+              <img src={`${import.meta.env.BASE_URL}Farma-logo3.svg`} alt="FarmaGo" className="h-8 w-8" />
               <div>
                 <h1 className="text-xs font-bold text-gray-900">FarmaGo</h1>
                 <p className="text-[9px] text-gray-400">Dashboard</p>
