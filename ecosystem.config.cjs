@@ -7,6 +7,7 @@ module.exports = {
     exec_mode: 'fork',
     autorestart: true,
     max_memory_restart: '500M',
+    env_file: '/var/www/Farmago/.env',
     env: {
       NODE_ENV: 'production',
       PORT: 3001
