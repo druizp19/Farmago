@@ -21,6 +21,11 @@ export interface EnvConfig {
   REDIS_HOST?: string;
   REDIS_PORT?: number;
   REDIS_PASSWORD?: string;
+
+  // Stock API Configuration
+  STOCK_API_URL: string;
+  STOCK_API_USERNAME: string;
+  STOCK_API_PASSWORD: string;
 }
 
 export const ENV: EnvConfig = {
@@ -36,10 +41,20 @@ export const ENV: EnvConfig = {
   REDIS_HOST: process.env.REDIS_HOST,
   REDIS_PORT: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT, 10) : undefined,
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+  STOCK_API_URL: process.env.STOCK_API_URL || 'http://190.187.120.183:88',
+  STOCK_API_USERNAME: process.env.STOCK_API_USERNAME || '',
+  STOCK_API_PASSWORD: process.env.STOCK_API_PASSWORD || '',
 };
 
 export function validateEnv(): void {
-  const required = ['VTEX_ACCOUNT', 'VTEX_APP_KEY', 'VTEX_APP_TOKEN'];
+  const required = [
+    'VTEX_ACCOUNT', 
+    'VTEX_APP_KEY', 
+    'VTEX_APP_TOKEN',
+    'STOCK_API_URL',
+    'STOCK_API_USERNAME',
+    'STOCK_API_PASSWORD'
+  ];
   const missing = required.filter((key) => !process.env[key]);
 
   if (missing.length > 0) {

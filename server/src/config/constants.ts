@@ -29,11 +29,26 @@ export const CACHE_CONFIG = {
   KEYS: {
     HISTORICAL_ORDERS: 'historical_orders',
     ORDER_DETAILS: 'order_details',
+    STOCK_CACHE: 'stock_cache',
   },
   TTL: {
     ORDERS: 300, // 5 minutos
     DETAILS: 0, // Sin expiración
+    STOCK: 300, // 5 minutos
   },
+} as const;
+
+export const STOCK_CONFIG = {
+  // Umbrales de alerta
+  LOW_THRESHOLD: 10,        // Alertar si stock <= 10
+  CRITICAL_THRESHOLD: 5,    // Crítico si stock <= 5
+  
+  // Sincronización
+  SYNC_INTERVAL_MS: 5 * 60 * 1000, // 5 minutos
+  
+  // Almacenes
+  WAREHOUSES: ['PT', 'CV', '94'] as const,
+  DEFAULT_WAREHOUSE: 'PT',
 } as const;
 
 export const STATUS_LABELS: Record<string, string> = {

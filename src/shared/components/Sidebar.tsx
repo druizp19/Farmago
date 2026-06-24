@@ -1,4 +1,4 @@
-import { BarChart3, List, Package, Truck, Menu, RefreshCw, Clock, Wifi, WifiOff, LogOut } from 'lucide-react';
+import { BarChart3, List, Package, Truck, Menu, RefreshCw, Clock, Wifi, WifiOff, LogOut, Warehouse } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Separator } from '../../components/ui/separator';
 import { memo, useMemo } from 'react';
@@ -7,6 +7,7 @@ interface SidebarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
   ordersCount: number;
+  stockAlertsCount?: number;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
   connected: boolean;
@@ -20,7 +21,8 @@ interface SidebarProps {
 export const Sidebar = memo(({ 
   activeTab, 
   onTabChange, 
-  ordersCount, 
+  ordersCount,
+  stockAlertsCount = 0,
   isCollapsed, 
   onToggleCollapse,
   connected,
@@ -47,6 +49,12 @@ export const Sidebar = memo(({
       icon: Package,
     },
     {
+      id: 'inventory',
+      label: 'Inventario',
+      icon: Warehouse,
+      badge: stockAlertsCount > 0 ? stockAlertsCount : undefined,
+    },
+    {
       id: 'delivery',
       label: 'Delivery',
       icon: Truck,
@@ -57,7 +65,7 @@ export const Sidebar = memo(({
       icon: List,
       badge: ordersCount,
     },
-  ], [ordersCount]);
+  ], [ordersCount, stockAlertsCount]);
 
   return (
     <aside 

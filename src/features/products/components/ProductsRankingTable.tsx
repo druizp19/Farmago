@@ -107,7 +107,8 @@ export function ProductsRankingTable({ products }: ProductsRankingTableProps) {
             </tr>
           </thead>
           <tbody>
-            {sortedProducts.map((p, i) => (
+            {sortedProducts.map((p, i) => {
+              return (
               <tr key={p.id} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
                 <td className="px-3 py-2.5 text-gray-400 font-medium">{i + 1}</td>
                 <td className="px-3 py-2.5">
@@ -131,7 +132,8 @@ export function ProductsRankingTable({ products }: ProductsRankingTableProps) {
                   S/ {(p.totalRevenue / 100).toLocaleString('es-PE', { minimumFractionDigits: 2 })}
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

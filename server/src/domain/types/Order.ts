@@ -118,6 +118,7 @@ export interface LogisticsInfo {
   deliveryCompany: string;
   shippingEstimate: string;
   shippingEstimateDate: string;
+  warehouseId?: string;  // Almacén del que sale el producto (PT, CV, 94)
   pickupStoreInfo?: PickupStoreInfo;
   slas?: SLA[];
   [key: string]: any;

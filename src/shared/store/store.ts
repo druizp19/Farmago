@@ -93,9 +93,10 @@ const DEFAULT_FILTERS: DashboardFilters = {
   paymentMethod: [],
   cardType: [],
   categoryLevel1: [],
-  categoryLevel2: [],
-  categoryLevel3: [],
-  isCyberOrder: 'all',
+  categoryLevel2: [] ,
+  categoryLevel3: [] ,
+  isCyberOrder: 'all' ,
+  productSearch: '' ,
 };
 
 export const useFiltersStore = create<FiltersState>((set) => ({

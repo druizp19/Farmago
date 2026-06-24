@@ -54,6 +54,7 @@ export function useDashboard() {
     categoryStats,
     categoryList,
     orderCategoryMap,
+    productsByOrder,
     filteredProducts,
     filteredCategoryStats,
     

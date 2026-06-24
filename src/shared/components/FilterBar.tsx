@@ -83,7 +83,8 @@ export function FilterBar({
     filters.dateFrom !== '' ||
     filters.dateTo !== '' ||
     filters.timeFrom !== '' ||
-    filters.timeTo !== '';
+    filters.timeTo !== '' ||
+    (filters.productSearch && filters.productSearch.trim().length > 0);
 
   const activeCount = [
     filters.status.length > 0,
@@ -96,6 +97,7 @@ export function FilterBar({
     filters.categoryLevel3.length > 0,
     filters.dateFrom !== '' || filters.dateTo !== '',
     filters.timeFrom !== '' || filters.timeTo !== '',
+    (filters.productSearch && filters.productSearch.trim().length > 0),
   ].filter(Boolean).length;
 
   const applyPreset = (days: number) => {
@@ -149,6 +151,26 @@ export function FilterBar({
           </div>
 
           <div className="h-2.5 w-px bg-gray-200 flex-shrink-0 hidden sm:block" />
+
+          {/* Buscador de Productos/Marcas */}
+          <div className="relative flex items-center">
+            <input
+              type="text"
+              value={filters.productSearch || ''}
+              onChange={e => setFilters({ ...filters, productSearch: e.target.value })}
+              placeholder="Buscar producto o marca..."
+              className="text-[10px] border border-gray-200 rounded pl-2 pr-6 py-0.5 w-44 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 font-sans"
+            />
+            {filters.productSearch ? (
+              <button 
+                onClick={() => setFilters({ ...filters, productSearch: '' })}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                title="Limpiar búsqueda"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            ) : null}
+          </div>
 
           {/* Date presets */}
           <div className="flex items-center gap-0.5">

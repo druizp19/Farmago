@@ -25,7 +25,7 @@ export function useKPIs(orders: OrderListItem[]): DashboardKPIs {
     let cyberDiscountCents = 0;
 
     for (const order of orders) {
-      const value = order.totalValue || 0;
+      const value = (order as any).filteredValue !== undefined ? (order as any).filteredValue : (order.totalValue || 0);
       totalRevenueCents += value;
       if (order.isAllDelivered) deliveredOrdersCount++;
 

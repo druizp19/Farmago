@@ -11,9 +11,11 @@ export function useOrderFilters(orders: OrderListItem[]) {
 
   const filteredOrdersWithRevenue = useMemo(() => {
     const hasCategoryFilter = filters.categoryLevel1.length > 0 || filters.categoryLevel2.length > 0 || filters.categoryLevel3.length > 0;
+    const hasProductFilter = !!filters.productSearch && filters.productSearch.trim().length > 0;
+    const searchLower = hasProductFilter ? filters.productSearch.trim().toLowerCase() : '';
     
     const result = orders.map(o => {
-      // Apply non-category filters first
+      // Apply non-product/category filters first
       let passesFilters = true;
       
       // Status filter (array)
@@ -67,8 +69,8 @@ export function useOrderFilters(orders: OrderListItem[]) {
       
       if (!passesFilters) return null;
       
-      // If no category filter, include full order
-      if (!hasCategoryFilter) {
+      // If no product or category filter, include full order
+      if (!hasCategoryFilter && !hasProductFilter) {
         return { ...o, filteredValue: o.totalValue };
       }
       
@@ -83,31 +85,35 @@ export function useOrderFilters(orders: OrderListItem[]) {
       let hasMatchingProduct = false;
       
       for (const product of orderProducts) {
-        if (!product.category) continue;
+        let matchesCategory = true;
         
-        const levels = product.category.split(' > ').map(l => l.trim());
-        
-        let matches = true;
-        
-        if (filters.categoryLevel1.length > 0) {
-          if (!levels[0] || !filters.categoryLevel1.includes(levels[0])) {
-            matches = false;
+        if (hasCategoryFilter) {
+          if (!product.category) {
+            matchesCategory = false;
+          } else {
+            const levels = product.category.split(' > ').map(l => l.trim());
+            if (filters.categoryLevel1.length > 0 && (!levels[0] || !filters.categoryLevel1.includes(levels[0]))) {
+              matchesCategory = false;
+            }
+            if (matchesCategory && filters.categoryLevel2.length > 0 && (!levels[1] || !filters.categoryLevel2.includes(levels[1]))) {
+              matchesCategory = false;
+            }
+            if (matchesCategory && filters.categoryLevel3.length > 0 && (!levels[2] || !filters.categoryLevel3.includes(levels[2]))) {
+              matchesCategory = false;
+            }
           }
         }
         
-        if (matches && filters.categoryLevel2.length > 0) {
-          if (!levels[1] || !filters.categoryLevel2.includes(levels[1])) {
-            matches = false;
+        let matchesProduct = true;
+        if (hasProductFilter) {
+          const productName = product.name ? product.name.toLowerCase() : '';
+          const productSku = product.productId ? product.productId.toLowerCase() : '';
+          if (!productName.includes(searchLower) && !productSku.includes(searchLower)) {
+            matchesProduct = false;
           }
         }
         
-        if (matches && filters.categoryLevel3.length > 0) {
-          if (!levels[2] || !filters.categoryLevel3.includes(levels[2])) {
-            matches = false;
-          }
-        }
-        
-        if (matches) {
+        if (matchesCategory && matchesProduct) {
           filteredValue += product.totalValue;
           hasMatchingProduct = true;
         }

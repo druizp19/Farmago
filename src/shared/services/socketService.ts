@@ -1,6 +1,7 @@
 import { io, Socket } from 'socket.io-client';
 import { API_CONFIG } from '../config/constants';
 import type { OrderListItem, ProductAggregation, CategoryStat, DeliveryStat } from '../../types/orders';
+import type { StockResponse, StockUpdate, StockAlert, StockDiscrepancy } from '../../types/stock';
 
 export interface OrdersUpdatePayload {
   orders: OrderListItem[];
@@ -43,8 +44,13 @@ class SocketService {
       return this.socket;
     }
 
+    // En desarrollo, usar ruta estándar. En producción, usar BASE_URL
+    const socketPath = import.meta.env.DEV 
+      ? '/socket.io' 
+      : `${import.meta.env.BASE_URL}socket.io`;
+
     this.socket = io(API_CONFIG.SERVER_URL, {
-      path: `${import.meta.env.BASE_URL}socket.io`,
+      path: socketPath,
       transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionDelay: API_CONFIG.SOCKET_RECONNECTION_DELAY,
@@ -84,8 +90,32 @@ class SocketService {
     this.socket?.on('products:update', callback);
   }
 
+  onStockUpdate(callback: (data: StockResponse) => void): void {
+    this.socket?.on('stock:update', callback);
+  }
+
+  onStockSyncComplete(callback: (data: StockResponse) => void): void {
+    this.socket?.on('stock:sync-complete', callback);
+  }
+
+  onStockRealtimeUpdate(callback: (data: StockUpdate) => void): void {
+    this.socket?.on('stock:realtime-update', callback);
+  }
+
+  onStockAlerts(callback: (data: { alerts: StockAlert[]; timestamp: string }) => void): void {
+    this.socket?.on('stock:alerts', callback);
+  }
+
+  onStockCorrected(callback: (data: { discrepancies: StockDiscrepancy[]; timestamp: string }) => void): void {
+    this.socket?.on('stock:corrected', callback);
+  }
+
   emitRefresh(): void {
     this.socket?.emit('orders:refresh');
+  }
+
+  emitStockRefresh(): void {
+    this.socket?.emit('stock:refresh');
   }
 
   getSocket(): Socket | null {

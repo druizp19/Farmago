@@ -168,6 +168,7 @@ export interface DashboardFilters {
   categoryLevel2: string[];
   categoryLevel3: string[];
   isCyberOrder: string; // 'all' | 'cyber' | 'regular'
+  productSearch: string; // Filtro de búsqueda por producto o marca
 }
 
 export interface DashboardKPIs {
