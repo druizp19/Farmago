@@ -159,6 +159,43 @@ function DashboardContent({ logout, currentUser }: { logout: () => void; current
     return list.sort((a, b) => a.stock - b.stock);
   }, [orderDetailsMap, stock]);
 
+  const zeroStockSoldAlerts = useMemo(() => {
+    if (!orderDetailsMap || !stock) return [];
+    
+    const soldSKUsMap: Record<string, string> = {};
+    Object.values(orderDetailsMap).forEach((order: any) => {
+      if (order && order.items) {
+        order.items.forEach((item: any) => {
+          const sku = item.refId || item.productId;
+          if (sku) soldSKUsMap[sku] = item.name;
+        });
+      }
+    });
+
+    const list: any[] = [];
+    Object.entries(soldSKUsMap).forEach(([sku, name]) => {
+      const hasStockReport = Object.values(stock).some((wh: any) => wh[sku] !== undefined);
+      if (!hasStockReport) return;
+
+      const totalStock = Object.values(stock).reduce((acc: number, wh: any) => {
+        return acc + (wh[sku] ?? 0);
+      }, 0);
+
+      if (totalStock === 0) {
+        list.push({
+          refId: sku,
+          name: name,
+          warehouse: 'Total',
+          stock: 0,
+          level: 'depleted',
+          timestamp: new Date()
+        });
+      }
+    });
+
+    return list;
+  }, [orderDetailsMap, stock]);
+
   const toggleSidebar = useCallback(() => {
     setSidebarCollapsed(prev => !prev);
   }, []);
@@ -577,9 +614,9 @@ function DashboardContent({ logout, currentUser }: { logout: () => void; current
         onClose={clearAllNewOrders} 
       />
       {/* Mostrar notificaciones de alertas de stock */}
-      {!dismissedAlerts && alerts.length > 0 && (
+      {!dismissedAlerts && zeroStockSoldAlerts.length > 0 && (
         <StockAlertNotification 
-          alerts={alerts} 
+          alerts={zeroStockSoldAlerts} 
           onDismiss={() => setDismissedAlerts(true)} 
         />
       )}

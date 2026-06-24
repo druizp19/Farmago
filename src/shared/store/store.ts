@@ -84,7 +84,7 @@ interface FiltersState {
 }
 
 const DEFAULT_FILTERS: DashboardFilters = {
-  status: [],
+  status: ['invoiced'],
   dateFrom: '',
   dateTo: '',
   timeFrom: '',
