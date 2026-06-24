@@ -45,19 +45,15 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Routes - Servir bajo /Farmago/ en producción, /api directo en desarrollo
-if (ENV.NODE_ENV === 'production') {
-  app.use('/Farmago/api', router);
-} else {
-  app.use('/api', router);
-}
+// Routes - Siempre servir en /api (Apache maneja el prefijo /Farmago/ en producción)
+app.use('/api', router);
 
 // ============================================================================
 // SOCKET.IO
 // ============================================================================
 
 const io = new Server(httpServer, {
-  path: ENV.NODE_ENV === 'production' ? '/Farmago/socket.io' : '/socket.io',
+  path: '/socket.io', // Apache maneja el prefijo /Farmago/ en producción
   cors: {
     origin: ENV.CORS_ORIGINS,
     methods: ['GET', 'POST'],
